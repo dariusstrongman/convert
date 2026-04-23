@@ -6,295 +6,604 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stromation Convert API — Convert any file. One API call.</title>
-<meta name="description" content="Convert between DOCX, PDF, Excel, HTML, PowerPoint, images, and more with a single API call. 50 free conversions per month. No watermark.">
-<meta name="theme-color" content="#0B0E14">
+<meta name="description" content="Convert between 23 file formats with a single API call. DOCX, PDF, Excel, HTML, PowerPoint, images and more. 50 free conversions per month. No watermark.">
+<meta name="theme-color" content="#06080C">
+<meta property="og:title" content="Stromation Convert API">
+<meta property="og:description" content="Universal file conversion API. 23 formats. One endpoint. 50 free per month.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://convert.stromation.com">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@stromationhq">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0B0E14;--card:#131720;--border:#1E2330;--text:#D4D7DE;--text2:#7A7F8E;--text3:#4A4F5C;--cyan:#00B4D8;--cyan-dim:rgba(0,180,216,.08);--cyan-glow:rgba(0,180,216,.2);--green:#10B981;--red:#EF4444;--amber:#F59E0B;--mono:'Space Mono',monospace;--body:'Outfit',sans-serif;--code:'Fira Code',monospace;--radius:8px}
-body{font-family:var(--body);color:var(--text);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased}
+:root{
+--bg:#06080C;--bg2:#0A0E15;--card:#0E1219;--card2:#131820;
+--border:#161C28;--border2:#1E2636;
+--text:#E2E5EB;--text2:#8B93A5;--text3:#4D5568;
+--cyan:#00E5FF;--cyan-dim:rgba(0,229,255,.06);--cyan-glow:rgba(0,229,255,.15);--cyan-med:rgba(0,229,255,.25);
+--green:#39FF14;--green-dim:rgba(57,255,20,.08);
+--red:#FF3B5C;--amber:#FFB800;--purple:#A78BFA;--pink:#F472B6;
+--blue:#60A5FA;
+--mono:'JetBrains Mono',monospace;--body:'DM Sans',sans-serif;
+--radius:10px;--radius-lg:16px
+}
+body{font-family:var(--body);color:var(--text);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 ::selection{background:var(--cyan);color:var(--bg)}
-.w{max-width:900px;margin:0 auto;padding:0 2rem}
+
+.w{max-width:1080px;margin:0 auto;padding:0 2rem}
+
+/* GRID BACKGROUND */
+body::before{content:"";position:fixed;inset:0;background:
+  linear-gradient(var(--border) 1px,transparent 1px),
+  linear-gradient(90deg,var(--border) 1px,transparent 1px);
+background-size:60px 60px;opacity:.15;pointer-events:none;z-index:0}
+body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(0,229,255,.04),transparent);pointer-events:none;z-index:0}
 
 /* NAV */
-nav{padding:.75rem 0;border-bottom:1px solid var(--border);background:rgba(11,14,20,.95);backdrop-filter:blur(12px);position:sticky;top:0;z-index:50}
+nav{padding:.6rem 0;border-bottom:1px solid var(--border);background:rgba(6,8,12,.92);backdrop-filter:blur(20px);position:sticky;top:0;z-index:100}
 nav .w{display:flex;align-items:center;justify-content:space-between}
-.logo{font-family:var(--mono);font-weight:700;font-size:.9rem;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:.4rem}
-.logo-dot{width:7px;height:7px;background:var(--cyan);border-radius:2px}
-.nav-r{display:flex;align-items:center;gap:1.5rem}
-.nav-r a{font-size:.82rem;color:var(--text2);text-decoration:none;transition:color .15s}
+.logo{font-family:var(--mono);font-weight:700;font-size:.85rem;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:.5rem;letter-spacing:-.02em}
+.logo-icon{width:24px;height:24px;border:2px solid var(--cyan);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--cyan);font-weight:800}
+.nav-r{display:flex;align-items:center;gap:1.75rem}
+.nav-r a{font-size:.8rem;color:var(--text2);text-decoration:none;transition:color .2s;font-weight:500}
 .nav-r a:hover{color:var(--cyan)}
-.nav-btn{background:var(--cyan);color:#000;padding:.4rem .9rem;border-radius:6px;font-weight:600;font-size:.8rem;font-family:var(--mono)}
+.nav-btn{background:var(--cyan);color:#000;padding:.45rem 1rem;border-radius:8px;font-weight:700;font-size:.78rem;font-family:var(--mono);transition:all .2s;letter-spacing:-.01em}
+.nav-btn:hover{box-shadow:0 0 24px var(--cyan-glow),0 0 60px rgba(0,229,255,.08)}
+
+section{position:relative;z-index:1}
 
 /* HERO */
-.hero{padding:5rem 0 3rem;text-align:center}
-.hero h1{font-family:var(--mono);font-size:2.8rem;font-weight:700;letter-spacing:-.03em;margin-bottom:.5rem;line-height:1.15}
-.hero h1 span{color:var(--cyan)}
-.hero p{font-size:1.1rem;color:var(--text2);max-width:520px;margin:0 auto 2rem}
-.key-form{display:flex;gap:.5rem;max-width:400px;margin:0 auto}
-.key-form input{flex:1;padding:.6rem 1rem;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:var(--body);font-size:.88rem}
-.key-form input:focus{outline:none;border-color:var(--cyan)}
-.key-form input::placeholder{color:var(--text3)}
-.key-form button{padding:.6rem 1.25rem;background:var(--cyan);color:#000;border:none;border-radius:var(--radius);font-family:var(--mono);font-weight:700;font-size:.82rem;cursor:pointer;white-space:nowrap;transition:all .15s}
-.key-form button:hover{box-shadow:0 0 20px var(--cyan-glow)}
-.key-result{max-width:400px;margin:1rem auto 0;padding:1rem;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);display:none;text-align:left}
-.key-result .key-val{font-family:var(--code);font-size:.82rem;color:var(--cyan);word-break:break-all;margin:.5rem 0}
-.key-result .copy-btn{font-size:.7rem;color:var(--text2);cursor:pointer;border:1px solid var(--border);background:none;padding:.2rem .6rem;border-radius:4px;font-family:var(--mono)}
-.key-result .copy-btn:hover{border-color:var(--cyan);color:var(--cyan)}
-.hero-note{font-size:.78rem;color:var(--text3);margin-top:1rem}
+.hero{padding:5rem 0 2rem;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.68rem;color:var(--cyan);background:var(--cyan-dim);border:1px solid rgba(0,229,255,.12);padding:.3rem .85rem;border-radius:20px;margin-bottom:1.5rem;letter-spacing:.02em}
+.hero-badge .pulse{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-family:var(--mono);font-size:3.2rem;font-weight:800;letter-spacing:-.04em;margin-bottom:.75rem;line-height:1.1}
+.hero h1 .gr{background:linear-gradient(135deg,var(--cyan),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:1.15rem;color:var(--text2);max-width:500px;margin:0 auto 2.5rem;font-weight:400}
+.hero-stats{display:flex;justify-content:center;gap:2.5rem;margin-top:2rem}
+.hero-stat{text-align:center}
+.hero-stat .num{font-family:var(--mono);font-size:1.5rem;font-weight:800;color:var(--text)}
+.hero-stat .label{font-size:.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-top:.15rem}
 
-/* CODE BLOCK */
-.code-section{padding:3rem 0}
-.code-block{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-.code-bar{display:flex;align-items:center;gap:6px;padding:.5rem .75rem;border-bottom:1px solid var(--border);background:rgba(0,0,0,.2)}
-.code-dot{width:8px;height:8px;border-radius:50%}
+/* CONVERTER HERO */
+.converter-box{max-width:560px;margin:0 auto;background:var(--card);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:1.75rem;position:relative;overflow:hidden}
+.converter-box::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:200px;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent)}
+.converter-row{display:flex;align-items:center;gap:.75rem}
+.fmt-select{flex:1;position:relative}
+.fmt-select label{display:block;font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:.35rem}
+.fmt-select select{width:100%;padding:.65rem .75rem;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);font-family:var(--mono);font-size:.85rem;font-weight:600;appearance:none;cursor:pointer;transition:border-color .2s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%234D5568' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .75rem center}
+.fmt-select select:focus{outline:none;border-color:var(--cyan)}
+.fmt-select select:hover{border-color:var(--text3)}
+.convert-arrow{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;background:var(--cyan-dim);border:1px solid rgba(0,229,255,.15);color:var(--cyan);flex-shrink:0;margin-top:1rem;cursor:pointer;transition:all .25s}
+.convert-arrow:hover{background:rgba(0,229,255,.12);box-shadow:0 0 20px var(--cyan-glow);transform:scale(1.08)}
+.convert-arrow svg{width:18px;height:18px}
+.converter-form{margin-top:1.25rem;display:flex;gap:.5rem}
+.converter-form input{flex:1;padding:.6rem 1rem;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);font-family:var(--body);font-size:.85rem}
+.converter-form input:focus{outline:none;border-color:var(--cyan)}
+.converter-form input::placeholder{color:var(--text3)}
+.converter-form button{padding:.6rem 1.4rem;background:var(--cyan);color:#000;border:none;border-radius:var(--radius);font-family:var(--mono);font-weight:700;font-size:.8rem;cursor:pointer;white-space:nowrap;transition:all .2s;letter-spacing:-.01em}
+.converter-form button:hover{box-shadow:0 0 24px var(--cyan-glow)}
+.converter-form button:disabled{opacity:.5;cursor:not-allowed}
+.key-result{margin-top:1rem;padding:1rem;background:rgba(57,255,20,.04);border:1px solid rgba(57,255,20,.15);border-radius:var(--radius);display:none;text-align:left}
+.key-result .key-label{font-size:.72rem;color:var(--green);font-family:var(--mono);font-weight:600;margin-bottom:.35rem;display:flex;align-items:center;gap:.4rem}
+.key-result .key-label svg{width:14px;height:14px}
+.key-result .key-val{font-family:var(--mono);font-size:.8rem;color:var(--cyan);word-break:break-all;background:var(--bg);padding:.5rem .75rem;border-radius:6px;border:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+.key-result .key-val code{flex:1}
+.copy-btn{font-size:.65rem;color:var(--text3);cursor:pointer;border:1px solid var(--border2);background:var(--card);padding:.25rem .5rem;border-radius:4px;font-family:var(--mono);transition:all .2s;white-space:nowrap}
+.copy-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.key-result .key-note{font-size:.7rem;color:var(--text3);margin-top:.5rem}
+.hero-note{font-size:.75rem;color:var(--text3);margin-top:1.25rem;font-weight:400}
+
+/* SECTION HEADERS */
+.sec-label{font-family:var(--mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.14em;color:var(--text3);margin-bottom:.5rem}
+.sec-h{font-family:var(--mono);font-size:1.8rem;font-weight:800;margin-bottom:.5rem;letter-spacing:-.03em;line-height:1.2}
+.sec-sub{font-size:1rem;color:var(--text2);margin-bottom:2.5rem;max-width:500px}
+
+/* CODE BLOCKS */
+.code-section{padding:4rem 0 2rem}
+.code-block{background:var(--card);border:1px solid var(--border2);border-radius:var(--radius-lg);overflow:hidden}
+.code-bar{display:flex;align-items:center;gap:6px;padding:.6rem 1rem;border-bottom:1px solid var(--border);background:rgba(0,0,0,.25)}
+.code-dots{display:flex;gap:5px}
+.code-dot{width:10px;height:10px;border-radius:50%}
 .code-dot.r{background:#FF5F56}.code-dot.y{background:#FFBD2E}.code-dot.g{background:#27C93F}
-.code-title{margin-left:.5rem;font-family:var(--code);font-size:.6rem;color:var(--text3)}
-.code-tabs{display:flex;gap:0;margin-left:auto}
-.code-tab{font-family:var(--code);font-size:.6rem;padding:.2rem .6rem;color:var(--text3);cursor:pointer;border:1px solid transparent;border-radius:4px;transition:all .15s}
-.code-tab.active{color:var(--cyan);border-color:var(--border);background:rgba(0,180,216,.05)}
-pre{padding:1.25rem;font-family:var(--code);font-size:.8rem;line-height:1.7;overflow-x:auto;color:var(--text)}
-.c-key{color:var(--cyan)}.c-str{color:var(--green)}.c-num{color:var(--amber)}.c-com{color:var(--text3)}
+.code-title{margin-left:.75rem;font-family:var(--mono);font-size:.65rem;color:var(--text3);font-weight:500}
+.code-tabs{display:flex;gap:2px;margin-left:auto;background:var(--bg);border-radius:6px;padding:2px}
+.code-tab{font-family:var(--mono);font-size:.65rem;padding:.3rem .75rem;color:var(--text3);cursor:pointer;border-radius:5px;transition:all .2s;font-weight:500}
+.code-tab.active{color:var(--cyan);background:var(--card)}
+.code-tab:hover:not(.active){color:var(--text2)}
+pre{padding:1.5rem;font-family:var(--mono);font-size:.78rem;line-height:1.8;overflow-x:auto;color:var(--text)}
+pre .ln{color:var(--text3);user-select:none;display:inline-block;width:2ch;text-align:right;margin-right:1.5ch}
+.c-key{color:var(--cyan)}.c-str{color:var(--green)}.c-num{color:var(--amber)}.c-com{color:var(--text3);font-style:italic}.c-fn{color:var(--purple)}.c-flag{color:var(--pink)}
 
 /* FORMAT GRID */
-.formats{padding:3rem 0}
-.format-box{padding:1.75rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--card)}
-.format-box h3{font-family:var(--mono);font-size:.9rem;font-weight:700;margin-bottom:.75rem;color:var(--text)}
-.format-box .arrow-label{font-family:var(--code);font-size:.65rem;color:var(--cyan);text-transform:uppercase;letter-spacing:.1em;margin:1rem 0 .75rem}
-.fmt-tags{display:flex;flex-wrap:wrap;gap:.4rem}
-.fmt-tag{font-family:var(--code);font-size:.7rem;padding:.25rem .55rem;border-radius:4px;background:var(--cyan-dim);color:var(--text);border:1px solid var(--border)}
-.fmt-tag.doc{color:#60A5FA;background:rgba(96,165,250,.08)}.fmt-tag.sheet{color:var(--green);background:rgba(16,185,129,.08)}.fmt-tag.slide{color:var(--amber);background:rgba(245,158,11,.08)}.fmt-tag.img{color:#F472B6;background:rgba(244,114,182,.08)}.fmt-tag.text{color:var(--text2);background:rgba(122,127,142,.08)}
-.format-arrow{display:flex;align-items:center;justify-content:center;gap:.5rem;padding:1.25rem 0;color:var(--text3);font-family:var(--code);font-size:.75rem}
-.format-arrow svg{width:20px;height:20px;stroke:var(--cyan);fill:none;stroke-width:2}
-.conversion-examples{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.5rem;margin-top:1rem}
-.conv-example{font-family:var(--code);font-size:.72rem;color:var(--text2);padding:.4rem .6rem;border:1px solid var(--border);border-radius:4px;text-align:center}
-.conv-example span{color:var(--cyan)}
+.formats{padding:4rem 0}
+.format-categories{display:grid;grid-template-columns:repeat(5,1fr);gap:.75rem}
+.format-cat{padding:1.25rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--card);transition:border-color .2s}
+.format-cat:hover{border-color:var(--border2)}
+.format-cat h4{font-family:var(--mono);font-size:.72rem;font-weight:700;margin-bottom:.75rem;display:flex;align-items:center;gap:.4rem}
+.format-cat h4 .cat-dot{width:8px;height:8px;border-radius:2px}
+.cat-doc .cat-dot{background:var(--blue)}.cat-sheet .cat-dot{background:var(--green)}.cat-slide .cat-dot{background:var(--amber)}.cat-img .cat-dot{background:var(--pink)}.cat-text .cat-dot{background:var(--text2)}
+.format-cat .fmt-list{display:flex;flex-direction:column;gap:.3rem}
+.fmt-item{font-family:var(--mono);font-size:.72rem;color:var(--text2);padding:.2rem .45rem;border-radius:4px;transition:all .15s;cursor:default}
+.fmt-item:hover{background:var(--cyan-dim);color:var(--text)}
+.format-count{text-align:center;margin-top:2rem}
+.format-count span{font-family:var(--mono);font-size:2.2rem;font-weight:800;background:linear-gradient(135deg,var(--cyan),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.format-count p{font-size:.82rem;color:var(--text3);margin-top:.25rem}
+
+/* CONVERSION MATRIX */
+.matrix-preview{display:grid;grid-template-columns:repeat(auto-fill,minmax(135px,1fr));gap:.4rem;margin-top:2rem}
+.matrix-item{font-family:var(--mono);font-size:.7rem;padding:.45rem .6rem;border:1px solid var(--border);border-radius:6px;text-align:center;color:var(--text2);transition:all .2s;cursor:default}
+.matrix-item:hover{border-color:var(--cyan);color:var(--text);background:var(--cyan-dim);transform:translateY(-1px)}
+.matrix-item .arr{color:var(--cyan);margin:0 .25rem}
 
 /* FEATURES */
-.features{padding:3rem 0}
-.sec-label{font-family:var(--code);font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--text3);margin-bottom:.75rem}
-.sec-h{font-family:var(--mono);font-size:1.6rem;font-weight:700;margin-bottom:2rem;letter-spacing:-.02em}
-.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
-.feat{padding:1.25rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--card)}
-.feat h3{font-family:var(--mono);font-size:.85rem;font-weight:700;margin-bottom:.3rem}
-.feat p{font-size:.8rem;color:var(--text2);line-height:1.5}
+.features{padding:4rem 0}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}
+.feat{padding:1.5rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--card);transition:all .25s}
+.feat:hover{border-color:var(--border2);transform:translateY(-2px)}
+.feat-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.75rem;font-size:1rem}
+.feat h3{font-family:var(--mono);font-size:.82rem;font-weight:700;margin-bottom:.35rem;letter-spacing:-.01em}
+.feat p{font-size:.8rem;color:var(--text2);line-height:1.55}
 
 /* PRICING */
-.pricing{padding:3rem 0}
-.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
-.price-card{padding:1.75rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--card)}
-.price-card.pop{border-color:var(--cyan);box-shadow:0 0 30px var(--cyan-dim)}
-.price-tag{font-family:var(--code);font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:.5rem}
-.price-card h3{font-family:var(--mono);font-size:1rem;font-weight:700;margin-bottom:.25rem}
-.price-val{font-family:var(--code);font-size:2rem;font-weight:700;color:var(--cyan);margin-bottom:.25rem}
-.price-val span{font-size:.8rem;font-weight:400;color:var(--text3)}
-.price-card ul{list-style:none;margin-top:1rem}
-.price-card li{font-size:.82rem;color:var(--text2);padding:.3rem 0;padding-left:1rem;position:relative}
-.price-card li::before{content:"";position:absolute;left:0;top:.55rem;width:5px;height:5px;border-radius:50%;background:var(--green)}
-.price-btn{display:block;text-align:center;margin-top:1.25rem;padding:.6rem;border-radius:var(--radius);font-family:var(--mono);font-size:.8rem;font-weight:700;text-decoration:none;transition:all .15s}
-.price-btn-free{background:var(--cyan-dim);color:var(--cyan);border:1px solid var(--border)}
-.price-btn-free:hover{border-color:var(--cyan)}
-.price-btn-pro{background:var(--cyan);color:#000}
-.price-btn-pro:hover{box-shadow:0 0 20px var(--cyan-glow)}
+.pricing{padding:4rem 0}
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;align-items:start}
+.price-card{padding:2rem;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--card);transition:all .3s;position:relative}
+.price-card:hover{transform:translateY(-3px)}
+.price-card.pop{border-color:var(--cyan);background:linear-gradient(180deg,rgba(0,229,255,.03),var(--card))}
+.price-card.pop::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:60%;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent)}
+.price-tag{font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.12em;color:var(--text3);margin-bottom:.75rem}
+.price-card.pop .price-tag{color:var(--cyan)}
+.price-card h3{font-family:var(--mono);font-size:1.1rem;font-weight:700;margin-bottom:.15rem}
+.price-val{font-family:var(--mono);font-size:2.5rem;font-weight:800;margin:.5rem 0}
+.price-val .dollar{font-size:1.2rem;vertical-align:super;color:var(--text2);margin-right:.1rem}
+.price-val .period{font-size:.8rem;font-weight:400;color:var(--text3)}
+.price-card ul{list-style:none;margin:1.25rem 0}
+.price-card li{font-size:.82rem;color:var(--text2);padding:.35rem 0;padding-left:1.25rem;position:relative}
+.price-card li::before{content:"";position:absolute;left:0;top:.6rem;width:6px;height:6px;border-radius:50%;background:var(--green)}
+.price-btn{display:block;text-align:center;padding:.65rem;border-radius:var(--radius);font-family:var(--mono);font-size:.8rem;font-weight:700;text-decoration:none;transition:all .2s;letter-spacing:-.01em}
+.price-btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2)}
+.price-btn-outline:hover{border-color:var(--cyan);color:var(--cyan)}
+.price-btn-solid{background:var(--cyan);color:#000;border:1px solid var(--cyan)}
+.price-btn-solid:hover{box-shadow:0 0 24px var(--cyan-glow)}
 
 /* DOCS */
-.docs{padding:3rem 0}
-.doc-section{margin-bottom:2rem}
-.doc-section h3{font-family:var(--mono);font-size:1rem;font-weight:700;margin-bottom:.75rem;color:var(--cyan)}
+.docs{padding:4rem 0}
+.doc-section{margin-bottom:2.5rem}
+.doc-section h3{font-family:var(--mono);font-size:.95rem;font-weight:700;margin-bottom:.75rem;color:var(--cyan);display:flex;align-items:center;gap:.5rem}
+.doc-section h3 .method{background:var(--green-dim);color:var(--green);font-size:.6rem;padding:.15rem .45rem;border-radius:4px;font-weight:700;letter-spacing:.03em}
 .doc-table{width:100%;border-collapse:collapse;font-size:.82rem}
-.doc-table th{text-align:left;padding:.6rem .75rem;font-family:var(--code);font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);background:rgba(0,0,0,.2);border-bottom:1px solid var(--border)}
-.doc-table td{padding:.6rem .75rem;border-bottom:1px solid var(--border);color:var(--text2)}
-.doc-table td:first-child{font-family:var(--code);color:var(--text)}
-.doc-table code{font-family:var(--code);font-size:.75rem;background:rgba(0,180,216,.06);padding:.1rem .4rem;border-radius:3px;color:var(--cyan)}
-.required{color:var(--red);font-size:.6rem;font-family:var(--code)}
+.doc-table th{text-align:left;padding:.6rem .85rem;font-family:var(--mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);background:var(--bg2);border-bottom:1px solid var(--border)}
+.doc-table td{padding:.6rem .85rem;border-bottom:1px solid var(--border);color:var(--text2)}
+.doc-table td:first-child{font-family:var(--mono);color:var(--text);font-weight:500}
+.doc-table code{font-family:var(--mono);font-size:.72rem;background:var(--cyan-dim);padding:.15rem .45rem;border-radius:4px;color:var(--cyan)}
+.required{color:var(--red);font-size:.58rem;font-family:var(--mono);font-weight:700;letter-spacing:.03em}
+.doc-note{font-size:.78rem;color:var(--text3);margin-top:.75rem;padding:.75rem 1rem;border-left:2px solid var(--border2);background:var(--bg2);border-radius:0 var(--radius) var(--radius) 0}
+.doc-note code{font-family:var(--mono);font-size:.72rem;color:var(--cyan)}
 
 /* FOOTER */
-footer{padding:2rem 0;border-top:1px solid var(--border);text-align:center}
+footer{padding:2.5rem 0;border-top:1px solid var(--border);position:relative;z-index:1}
+footer .w{display:flex;align-items:center;justify-content:space-between}
 footer p{font-size:.75rem;color:var(--text3)}
-footer a{color:var(--cyan);text-decoration:none}
+footer a{color:var(--text2);text-decoration:none;transition:color .2s}
+footer a:hover{color:var(--cyan)}
+.footer-links{display:flex;gap:1.5rem}
+.footer-links a{font-size:.75rem}
 
 /* RESPONSIVE */
-@media(max-width:768px){.hero h1{font-size:2rem}.feat-grid,.price-grid{grid-template-columns:1fr}.key-form{flex-direction:column}.conversion-examples{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.format-categories{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:768px){
+  .hero h1{font-size:2.2rem}
+  .feat-grid,.price-grid{grid-template-columns:1fr}
+  .converter-form{flex-direction:column}
+  .format-categories{grid-template-columns:repeat(2,1fr)}
+  .hero-stats{gap:1.5rem}
+  .hero-stat .num{font-size:1.2rem}
+  .converter-row{flex-direction:column}
+  .convert-arrow{margin-top:0;transform:rotate(90deg)}
+  .convert-arrow:hover{transform:rotate(90deg) scale(1.08)}
+  .matrix-preview{grid-template-columns:repeat(2,1fr)}
+  .nav-r{gap:.75rem}
+  .nav-r a:not(.nav-btn){display:none}
+  footer .w{flex-direction:column;gap:.75rem;text-align:center}
+  .code-tabs{flex-wrap:wrap}
+}
+@media(max-width:480px){
+  .format-categories{grid-template-columns:1fr}
+  .hero h1{font-size:1.8rem}
+}
+
+/* SCROLL ANIMATIONS */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s,transform .6s}
+.reveal.visible{opacity:1;transform:translateY(0)}
 </style>
 </head>
 <body>
 
-<nav><div class="w"><a href="/" class="logo"><span class="logo-dot"></span>Stromation Convert API</a><div class="nav-r"><a href="#formats">Formats</a><a href="#docs">Docs</a><a href="#pricing">Pricing</a><a href="login.html" class="nav-btn">Sign Up Free</a></div></div></nav>
+<nav>
+<div class="w">
+<a href="/" class="logo"><span class="logo-icon">C</span>Stromation Convert</a>
+<div class="nav-r">
+<a href="#formats">Formats</a>
+<a href="#docs">Docs</a>
+<a href="#pricing">Pricing</a>
+<a href="login.html">Login</a>
+<a href="#hero" class="nav-btn">Get API Key</a>
+</div>
+</div>
+</nav>
 
 <!-- HERO -->
 <section class="hero" id="hero">
 <div class="w">
-<h1>Convert any file.<br><span>One API call.</span></h1>
-<p>DOCX to PDF. Excel to CSV. HTML to Word. 50 free conversions per month.</p>
-<form class="key-form" id="keyForm" onsubmit="getKey(event)">
+<div class="hero-badge"><span class="pulse"></span> API is live</div>
+<h1>Any file to<br><span class="gr">any format.</span></h1>
+<p>One API call. 23 formats. Documents, spreadsheets, presentations, images. No per-conversion fees.</p>
+
+<div class="converter-box">
+<div class="converter-row">
+<div class="fmt-select">
+<label>From</label>
+<select id="fmtFrom">
+<optgroup label="Documents">
+<option value="docx">DOCX</option><option value="doc">DOC</option><option value="odt">ODT</option><option value="rtf">RTF</option><option value="pdf">PDF</option>
+</optgroup>
+<optgroup label="Spreadsheets">
+<option value="xlsx">XLSX</option><option value="xls">XLS</option><option value="ods">ODS</option><option value="csv">CSV</option>
+</optgroup>
+<optgroup label="Presentations">
+<option value="pptx">PPTX</option><option value="ppt">PPT</option><option value="odp">ODP</option>
+</optgroup>
+<optgroup label="Images">
+<option value="png">PNG</option><option value="jpg">JPG</option><option value="gif">GIF</option><option value="bmp">BMP</option><option value="tiff">TIFF</option><option value="svg">SVG</option><option value="webp">WEBP</option>
+</optgroup>
+<optgroup label="Text">
+<option value="html">HTML</option><option value="txt">TXT</option><option value="md">Markdown</option>
+</optgroup>
+</select>
+</div>
+
+<div class="convert-arrow" id="swapBtn" title="Swap formats">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+</div>
+
+<div class="fmt-select">
+<label>To</label>
+<select id="fmtTo">
+<optgroup label="Documents">
+<option value="pdf" selected>PDF</option><option value="docx">DOCX</option><option value="doc">DOC</option><option value="odt">ODT</option><option value="rtf">RTF</option>
+</optgroup>
+<optgroup label="Spreadsheets">
+<option value="xlsx">XLSX</option><option value="xls">XLS</option><option value="ods">ODS</option><option value="csv">CSV</option>
+</optgroup>
+<optgroup label="Presentations">
+<option value="pptx">PPTX</option>
+</optgroup>
+<optgroup label="Images">
+<option value="png">PNG</option><option value="jpg">JPG</option><option value="gif">GIF</option><option value="bmp">BMP</option><option value="tiff">TIFF</option><option value="svg">SVG</option><option value="webp">WEBP</option>
+</optgroup>
+<optgroup label="Text">
+<option value="html">HTML</option><option value="txt">TXT</option>
+</optgroup>
+</select>
+</div>
+</div>
+
+<form class="converter-form" id="keyForm" onsubmit="getKey(event)">
 <input type="email" id="keyEmail" placeholder="you@example.com" required>
 <button type="submit" id="keyBtn">Get Free API Key</button>
 </form>
+
 <div class="key-result" id="keyResult">
-<div style="font-size:.8rem;color:var(--green);margin-bottom:.25rem;">API key created</div>
-<div class="key-val" id="keyVal"></div>
-<button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('keyVal').textContent);this.textContent='copied'">copy</button>
-<div style="font-size:.7rem;color:var(--text3);margin-top:.5rem;">Also emailed to you. Keep it secret.</div>
+<div class="key-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> API key created</div>
+<div class="key-val"><code id="keyVal"></code><button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('keyVal').textContent);this.textContent='Copied!'">Copy</button></div>
+<div class="key-note">Also emailed to you. Keep it secret.</div>
 </div>
-<p class="hero-note">Free tier: 50 conversions/month. No credit card. No watermark.</p>
+</div>
+
+<p class="hero-note">50 free conversions/month. No credit card. No watermark.</p>
+
+<div class="hero-stats">
+<div class="hero-stat"><div class="num">23</div><div class="label">Formats</div></div>
+<div class="hero-stat"><div class="num">&lt;2s</div><div class="label">Avg Speed</div></div>
+<div class="hero-stat"><div class="num">$0</div><div class="label">Per Conversion</div></div>
+<div class="hero-stat"><div class="num">99.9%</div><div class="label">Uptime</div></div>
+</div>
 </div>
 </section>
 
 <!-- CODE EXAMPLES -->
-<section class="code-section">
+<section class="code-section reveal">
 <div class="w">
+<div class="sec-label">// quick start</div>
+<h2 class="sec-h">Four lines to convert anything</h2>
+<p class="sec-sub">Base64 in, base64 out. No multipart, no temp files, no SDKs needed.</p>
+
 <div class="code-block">
 <div class="code-bar">
-<span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span>
-<span class="code-title">convert.sh</span>
+<div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div>
+<span class="code-title">terminal</span>
 <div class="code-tabs">
-<div class="code-tab active" onclick="showTab('tab1',this)">DOCX to PDF</div>
-<div class="code-tab" onclick="showTab('tab2',this)">HTML to DOCX</div>
+<div class="code-tab active" onclick="showTab('tab1',this)">DOCX → PDF</div>
+<div class="code-tab" onclick="showTab('tab2',this)">HTML → DOCX</div>
+<div class="code-tab" onclick="showTab('tab3',this)">XLSX → CSV</div>
+<div class="code-tab" onclick="showTab('tab4',this)">PNG → WEBP</div>
 </div>
 </div>
-<pre id="tab1"><span class="c-com"># Convert a DOCX file to PDF</span>
-curl -X POST https://n8n.stromation.com/webhook/pdfapi \
-  -H <span class="c-str">"Content-Type: application/json"</span> \
-  -H <span class="c-str">"x-api-key: pk_your_api_key_here"</span> \
-  -d '{
-    <span class="c-key">"file_base64"</span>: <span class="c-str">"UEsDBBQAAAAIAG1..."</span>,
-    <span class="c-key">"filename"</span>: <span class="c-str">"invoice.docx"</span>,
+<pre id="tab1"><span class="c-com"># Convert a Word document to PDF</span>
+<span class="c-fn">curl</span> <span class="c-flag">-X</span> POST https://n8n.stromation.com/webhook/pdfapi \
+  <span class="c-flag">-H</span> <span class="c-str">"Content-Type: application/json"</span> \
+  <span class="c-flag">-H</span> <span class="c-str">"x-api-key: pk_your_api_key"</span> \
+  <span class="c-flag">-d</span> <span class="c-str">'{
+    <span class="c-key">"file_base64"</span>: <span class="c-str">"UEsDBBQAAAAI..."</span>,
+    <span class="c-key">"filename"</span>:    <span class="c-str">"invoice.docx"</span>,
     <span class="c-key">"output_format"</span>: <span class="c-str">"pdf"</span>
-  }'
+  }'</span>
 
-<span class="c-com"># Response:</span>
+<span class="c-com"># Response</span>
 {
-  <span class="c-key">"success"</span>: <span class="c-num">true</span>,
+  <span class="c-key">"success"</span>:       <span class="c-num">true</span>,
   <span class="c-key">"output_base64"</span>: <span class="c-str">"JVBERi0xLjQK..."</span>,
   <span class="c-key">"output_format"</span>: <span class="c-str">"pdf"</span>,
-  <span class="c-key">"input_format"</span>: <span class="c-str">"docx"</span>,
-  <span class="c-key">"mime_type"</span>: <span class="c-str">"application/pdf"</span>,
-  <span class="c-key">"size_bytes"</span>: <span class="c-num">24310</span>,
-  <span class="c-key">"duration_ms"</span>: <span class="c-num">1843</span>,
+  <span class="c-key">"input_format"</span>:  <span class="c-str">"docx"</span>,
+  <span class="c-key">"size_bytes"</span>:    <span class="c-num">24310</span>,
+  <span class="c-key">"duration_ms"</span>:   <span class="c-num">1843</span>,
   <span class="c-key">"usage"</span>: { <span class="c-key">"used"</span>: <span class="c-num">1</span>, <span class="c-key">"limit"</span>: <span class="c-num">50</span>, <span class="c-key">"plan"</span>: <span class="c-str">"free"</span> }
 }</pre>
-<pre id="tab2" style="display:none"><span class="c-com"># Convert HTML to a Word document</span>
-curl -X POST https://n8n.stromation.com/webhook/pdfapi \
-  -H <span class="c-str">"Content-Type: application/json"</span> \
-  -H <span class="c-str">"x-api-key: pk_your_api_key_here"</span> \
-  -d '{
-    <span class="c-key">"html"</span>: <span class="c-str">"&lt;h1&gt;Quarterly Report&lt;/h1&gt;&lt;p&gt;Revenue up 23%.&lt;/p&gt;"</span>,
+<pre id="tab2" style="display:none"><span class="c-com"># Convert raw HTML to a Word document</span>
+<span class="c-fn">curl</span> <span class="c-flag">-X</span> POST https://n8n.stromation.com/webhook/pdfapi \
+  <span class="c-flag">-H</span> <span class="c-str">"Content-Type: application/json"</span> \
+  <span class="c-flag">-H</span> <span class="c-str">"x-api-key: pk_your_api_key"</span> \
+  <span class="c-flag">-d</span> <span class="c-str">'{
+    <span class="c-key">"html"</span>: <span class="c-str">"&lt;h1&gt;Q4 Report&lt;/h1&gt;&lt;p&gt;Revenue up 23%&lt;/p&gt;"</span>,
     <span class="c-key">"output_format"</span>: <span class="c-str">"docx"</span>
-  }'
+  }'</span>
 
-<span class="c-com"># Response:</span>
+<span class="c-com"># Response</span>
 {
-  <span class="c-key">"success"</span>: <span class="c-num">true</span>,
-  <span class="c-key">"output_base64"</span>: <span class="c-str">"UEsDBBQAAAAIAH..."</span>,
+  <span class="c-key">"success"</span>:       <span class="c-num">true</span>,
+  <span class="c-key">"output_base64"</span>: <span class="c-str">"UEsDBBQAAAAI..."</span>,
   <span class="c-key">"output_format"</span>: <span class="c-str">"docx"</span>,
-  <span class="c-key">"input_format"</span>: <span class="c-str">"html"</span>,
-  <span class="c-key">"mime_type"</span>: <span class="c-str">"application/vnd.openxmlformats-officedocument.wordprocessingml.document"</span>,
-  <span class="c-key">"size_bytes"</span>: <span class="c-num">8741</span>,
-  <span class="c-key">"duration_ms"</span>: <span class="c-num">921</span>,
+  <span class="c-key">"input_format"</span>:  <span class="c-str">"html"</span>,
+  <span class="c-key">"size_bytes"</span>:    <span class="c-num">8741</span>,
+  <span class="c-key">"duration_ms"</span>:   <span class="c-num">921</span>,
   <span class="c-key">"usage"</span>: { <span class="c-key">"used"</span>: <span class="c-num">2</span>, <span class="c-key">"limit"</span>: <span class="c-num">50</span>, <span class="c-key">"plan"</span>: <span class="c-str">"free"</span> }
+}</pre>
+<pre id="tab3" style="display:none"><span class="c-com"># Convert an Excel spreadsheet to CSV</span>
+<span class="c-fn">curl</span> <span class="c-flag">-X</span> POST https://n8n.stromation.com/webhook/pdfapi \
+  <span class="c-flag">-H</span> <span class="c-str">"Content-Type: application/json"</span> \
+  <span class="c-flag">-H</span> <span class="c-str">"x-api-key: pk_your_api_key"</span> \
+  <span class="c-flag">-d</span> <span class="c-str">'{
+    <span class="c-key">"file_base64"</span>: <span class="c-str">"UEsDBBQAAAAI..."</span>,
+    <span class="c-key">"filename"</span>:    <span class="c-str">"data.xlsx"</span>,
+    <span class="c-key">"output_format"</span>: <span class="c-str">"csv"</span>
+  }'</span>
+
+<span class="c-com"># Response</span>
+{
+  <span class="c-key">"success"</span>:       <span class="c-num">true</span>,
+  <span class="c-key">"output_base64"</span>: <span class="c-str">"TmFtZSxFbWFp..."</span>,
+  <span class="c-key">"output_format"</span>: <span class="c-str">"csv"</span>,
+  <span class="c-key">"input_format"</span>:  <span class="c-str">"xlsx"</span>,
+  <span class="c-key">"size_bytes"</span>:    <span class="c-num">1204</span>,
+  <span class="c-key">"duration_ms"</span>:   <span class="c-num">445</span>,
+  <span class="c-key">"usage"</span>: { <span class="c-key">"used"</span>: <span class="c-num">3</span>, <span class="c-key">"limit"</span>: <span class="c-num">50</span>, <span class="c-key">"plan"</span>: <span class="c-str">"free"</span> }
+}</pre>
+<pre id="tab4" style="display:none"><span class="c-com"># Convert a PNG image to WebP</span>
+<span class="c-fn">curl</span> <span class="c-flag">-X</span> POST https://n8n.stromation.com/webhook/pdfapi \
+  <span class="c-flag">-H</span> <span class="c-str">"Content-Type: application/json"</span> \
+  <span class="c-flag">-H</span> <span class="c-str">"x-api-key: pk_your_api_key"</span> \
+  <span class="c-flag">-d</span> <span class="c-str">'{
+    <span class="c-key">"file_base64"</span>: <span class="c-str">"iVBORw0KGgo..."</span>,
+    <span class="c-key">"filename"</span>:    <span class="c-str">"photo.png"</span>,
+    <span class="c-key">"output_format"</span>: <span class="c-str">"webp"</span>
+  }'</span>
+
+<span class="c-com"># Response</span>
+{
+  <span class="c-key">"success"</span>:       <span class="c-num">true</span>,
+  <span class="c-key">"output_base64"</span>: <span class="c-str">"UklGRlYBAA..."</span>,
+  <span class="c-key">"output_format"</span>: <span class="c-str">"webp"</span>,
+  <span class="c-key">"input_format"</span>:  <span class="c-str">"png"</span>,
+  <span class="c-key">"size_bytes"</span>:    <span class="c-num">18420</span>,
+  <span class="c-key">"duration_ms"</span>:   <span class="c-num">312</span>,
+  <span class="c-key">"usage"</span>: { <span class="c-key">"used"</span>: <span class="c-num">4</span>, <span class="c-key">"limit"</span>: <span class="c-num">50</span>, <span class="c-key">"plan"</span>: <span class="c-str">"free"</span> }
 }</pre>
 </div>
 </div>
 </section>
 
 <!-- SUPPORTED FORMATS -->
-<section class="formats" id="formats">
+<section class="formats reveal" id="formats">
 <div class="w">
 <div class="sec-label">// supported formats</div>
-<h2 class="sec-h">17 input formats. 15 output formats.</h2>
-<div class="format-box">
-<h3>Input</h3>
-<div class="fmt-tags">
-<span class="fmt-tag doc">docx</span><span class="fmt-tag doc">doc</span><span class="fmt-tag doc">odt</span><span class="fmt-tag doc">rtf</span>
-<span class="fmt-tag sheet">xlsx</span><span class="fmt-tag sheet">xls</span><span class="fmt-tag sheet">ods</span><span class="fmt-tag sheet">csv</span>
-<span class="fmt-tag slide">pptx</span><span class="fmt-tag slide">ppt</span><span class="fmt-tag slide">odp</span>
-<span class="fmt-tag text">html</span><span class="fmt-tag text">txt</span><span class="fmt-tag text">md</span>
-<span class="fmt-tag">pdf</span>
-<span class="fmt-tag img">png</span><span class="fmt-tag img">jpg</span>
+<h2 class="sec-h">Every format you need</h2>
+<p class="sec-sub">Documents, spreadsheets, presentations, images, and plain text. Convert between any supported pair.</p>
+
+<div class="format-categories">
+<div class="format-cat cat-doc">
+<h4><span class="cat-dot"></span>Documents</h4>
+<div class="fmt-list">
+<span class="fmt-item">DOCX</span>
+<span class="fmt-item">DOC</span>
+<span class="fmt-item">ODT</span>
+<span class="fmt-item">RTF</span>
+<span class="fmt-item">PDF</span>
 </div>
-<div class="arrow-label">Output</div>
-<div class="fmt-tags">
-<span class="fmt-tag doc">docx</span><span class="fmt-tag doc">doc</span><span class="fmt-tag doc">odt</span><span class="fmt-tag doc">rtf</span>
-<span class="fmt-tag sheet">xlsx</span><span class="fmt-tag sheet">xls</span><span class="fmt-tag sheet">ods</span><span class="fmt-tag sheet">csv</span>
-<span class="fmt-tag slide">pptx</span>
-<span class="fmt-tag text">html</span><span class="fmt-tag text">txt</span>
-<span class="fmt-tag">pdf</span>
-<span class="fmt-tag img">png</span><span class="fmt-tag img">jpg</span>
 </div>
-<div class="conversion-examples">
-<div class="conv-example">docx <span>-></span> pdf</div>
-<div class="conv-example">xlsx <span>-></span> csv</div>
-<div class="conv-example">html <span>-></span> docx</div>
-<div class="conv-example">pptx <span>-></span> pdf</div>
-<div class="conv-example">csv <span>-></span> xlsx</div>
-<div class="conv-example">md <span>-></span> pdf</div>
-<div class="conv-example">pdf <span>-></span> png</div>
-<div class="conv-example">html <span>-></span> pdf</div>
+<div class="format-cat cat-sheet">
+<h4><span class="cat-dot"></span>Spreadsheets</h4>
+<div class="fmt-list">
+<span class="fmt-item">XLSX</span>
+<span class="fmt-item">XLS</span>
+<span class="fmt-item">ODS</span>
+<span class="fmt-item">CSV</span>
 </div>
+</div>
+<div class="format-cat cat-slide">
+<h4><span class="cat-dot"></span>Presentations</h4>
+<div class="fmt-list">
+<span class="fmt-item">PPTX</span>
+<span class="fmt-item">PPT</span>
+<span class="fmt-item">ODP</span>
+</div>
+</div>
+<div class="format-cat cat-img">
+<h4><span class="cat-dot"></span>Images</h4>
+<div class="fmt-list">
+<span class="fmt-item">PNG</span>
+<span class="fmt-item">JPG</span>
+<span class="fmt-item">GIF</span>
+<span class="fmt-item">BMP</span>
+<span class="fmt-item">TIFF</span>
+<span class="fmt-item">SVG</span>
+<span class="fmt-item">WEBP</span>
+</div>
+</div>
+<div class="format-cat cat-text">
+<h4><span class="cat-dot"></span>Text</h4>
+<div class="fmt-list">
+<span class="fmt-item">HTML</span>
+<span class="fmt-item">TXT</span>
+<span class="fmt-item">Markdown</span>
+</div>
+</div>
+</div>
+
+<div class="matrix-preview">
+<div class="matrix-item">DOCX <span class="arr">→</span> PDF</div>
+<div class="matrix-item">XLSX <span class="arr">→</span> CSV</div>
+<div class="matrix-item">HTML <span class="arr">→</span> DOCX</div>
+<div class="matrix-item">PPTX <span class="arr">→</span> PDF</div>
+<div class="matrix-item">CSV <span class="arr">→</span> XLSX</div>
+<div class="matrix-item">MD <span class="arr">→</span> PDF</div>
+<div class="matrix-item">PDF <span class="arr">→</span> PNG</div>
+<div class="matrix-item">PNG <span class="arr">→</span> WEBP</div>
+<div class="matrix-item">DOC <span class="arr">→</span> DOCX</div>
+<div class="matrix-item">HTML <span class="arr">→</span> PDF</div>
+<div class="matrix-item">JPG <span class="arr">→</span> PNG</div>
+<div class="matrix-item">RTF <span class="arr">→</span> PDF</div>
+<div class="matrix-item">ODS <span class="arr">→</span> XLSX</div>
+<div class="matrix-item">SVG <span class="arr">→</span> PNG</div>
+<div class="matrix-item">BMP <span class="arr">→</span> JPG</div>
+<div class="matrix-item">XLS <span class="arr">→</span> CSV</div>
+</div>
+
+<div class="format-count">
+<span>500+</span>
+<p>possible conversion combinations</p>
 </div>
 </div>
 </section>
 
 <!-- FEATURES -->
-<section class="features">
+<section class="features reveal">
 <div class="w">
-<div class="sec-label">// features</div>
-<h2 class="sec-h">What you get</h2>
+<div class="sec-label">// why this api</div>
+<h2 class="sec-h">Built for developers</h2>
+<p class="sec-sub">Simple, fast, and honest. No tricks.</p>
+
 <div class="feat-grid">
-<div class="feat"><h3>Fast</h3><p>Most conversions finish in under 2 seconds. No queue, no waiting.</p></div>
-<div class="feat"><h3>Auto-detect input</h3><p>Send a file with its filename and the API detects the format. Or set input_format manually.</p></div>
-<div class="feat"><h3>Any direction</h3><p>Documents, spreadsheets, presentations, images, text. Convert between any supported pair.</p></div>
-<div class="feat"><h3>No watermark</h3><p>Even on the free tier. Your files, your brand. Nothing added.</p></div>
-<div class="feat"><h3>Base64 in/out</h3><p>Send files as base64, get results as base64. Decode and save. No multipart hassle.</p></div>
-<div class="feat"><h3>Usage tracking</h3><p>Every response includes your current usage count and limit. No surprises.</p></div>
+<div class="feat">
+<div class="feat-icon" style="background:rgba(0,229,255,.08);color:var(--cyan)">&#9889;</div>
+<h3>Fast</h3>
+<p>Most conversions finish under 2 seconds. No queue, no polling. Synchronous response.</p>
+</div>
+<div class="feat">
+<div class="feat-icon" style="background:rgba(96,165,250,.08);color:var(--blue)">&#8644;</div>
+<h3>Any direction</h3>
+<p>Documents to images. Spreadsheets to text. Presentations to PDF. Convert between any supported pair.</p>
+</div>
+<div class="feat">
+<div class="feat-icon" style="background:rgba(57,255,20,.08);color:var(--green)">&#10003;</div>
+<h3>Auto-detect</h3>
+<p>Send a filename and the API detects the input format automatically. Or set it explicitly.</p>
+</div>
+<div class="feat">
+<div class="feat-icon" style="background:rgba(244,114,182,.08);color:var(--pink)">&#9711;</div>
+<h3>No watermark</h3>
+<p>Even on the free tier. Your files come back clean. Nothing added, nothing branded.</p>
+</div>
+<div class="feat">
+<div class="feat-icon" style="background:rgba(255,184,0,.08);color:var(--amber)">&#123;&#125;</div>
+<h3>Base64 in/out</h3>
+<p>Send files as base64, get results as base64. One JSON payload. No multipart uploads.</p>
+</div>
+<div class="feat">
+<div class="feat-icon" style="background:rgba(167,139,250,.08);color:var(--purple)">&#9783;</div>
+<h3>Usage tracking</h3>
+<p>Every response includes your current usage count and plan limit. Monitor in your dashboard.</p>
+</div>
 </div>
 </div>
 </section>
 
 <!-- PRICING -->
-<section class="pricing" id="pricing">
+<section class="pricing reveal" id="pricing">
 <div class="w">
 <div class="sec-label">// pricing</div>
-<h2 class="sec-h">Simple. Per month.</h2>
+<h2 class="sec-h">No per-conversion fees</h2>
+<p class="sec-sub">Flat monthly pricing. Every format included on every plan.</p>
+
 <div class="price-grid">
 <div class="price-card">
-<div class="price-tag">Free</div>
+<div class="price-tag">Free forever</div>
 <h3>Starter</h3>
-<div class="price-val">$0<span>/mo</span></div>
-<ul><li>50 conversions per month</li><li>All formats supported</li><li>No watermark</li><li>Email support</li></ul>
-<a href="login.html" class="price-btn price-btn-free">Sign Up Free</a>
+<div class="price-val"><span class="dollar">$</span>0<span class="period">/mo</span></div>
+<ul>
+<li>50 conversions per month</li>
+<li>All 23 formats</li>
+<li>No watermark</li>
+<li>API key + dashboard</li>
+<li>Email support</li>
+</ul>
+<a href="#hero" class="price-btn price-btn-outline">Get Free Key</a>
 </div>
 <div class="price-card pop">
-<div class="price-tag" style="color:var(--cyan)">Popular</div>
+<div class="price-tag">Most popular</div>
 <h3>Pro</h3>
-<div class="price-val">$9<span>/mo</span></div>
-<ul><li>1,000 conversions per month</li><li>Priority processing</li><li>All formats supported</li><li>Email support</li></ul>
-<a href="mailto:contact@stromation.com?subject=Convert API Pro" class="price-btn price-btn-pro">Upgrade</a>
+<div class="price-val"><span class="dollar">$</span>9<span class="period">/mo</span></div>
+<ul>
+<li>1,000 conversions per month</li>
+<li>All 23 formats</li>
+<li>No watermark</li>
+<li>Priority processing</li>
+<li>Email support</li>
+</ul>
+<a href="login.html" class="price-btn price-btn-solid">Upgrade to Pro</a>
 </div>
 <div class="price-card">
 <div class="price-tag">Volume</div>
 <h3>Business</h3>
-<div class="price-val">$29<span>/mo</span></div>
-<ul><li>5,000 conversions per month</li><li>Priority processing</li><li>All formats supported</li><li>Dedicated support</li></ul>
-<a href="mailto:contact@stromation.com?subject=Convert API Business" class="price-btn price-btn-free">Contact Us</a>
+<div class="price-val"><span class="dollar">$</span>29<span class="period">/mo</span></div>
+<ul>
+<li>5,000 conversions per month</li>
+<li>All 23 formats</li>
+<li>No watermark</li>
+<li>Priority processing</li>
+<li>Dedicated support</li>
+</ul>
+<a href="mailto:contact@stromation.com?subject=Convert API Business" class="price-btn price-btn-outline">Contact Us</a>
 </div>
 </div>
 </div>
 </section>
 
 <!-- API DOCS -->
-<section class="docs" id="docs">
+<section class="docs reveal" id="docs">
 <div class="w">
 <div class="sec-label">// api reference</div>
 <h2 class="sec-h">Documentation</h2>
+<p class="sec-sub">Everything you need to start converting files.</p>
 
 <div class="doc-section">
-<h3>POST /webhook/pdfapi</h3>
-<p style="font-size:.88rem;color:var(--text2);margin-bottom:1rem;">Convert a file between any supported format.</p>
+<h3><span class="method">POST</span> /webhook/pdfapi</h3>
+<p style="font-size:.88rem;color:var(--text2);margin-bottom:1.25rem;">Convert a file between any supported format.</p>
 
-<h4 style="font-family:var(--mono);font-size:.82rem;margin-bottom:.5rem;color:var(--text);">Headers</h4>
+<h4 style="font-family:var(--mono);font-size:.78rem;margin-bottom:.5rem;color:var(--text);font-weight:600">Headers</h4>
 <table class="doc-table">
 <thead><tr><th>Header</th><th>Value</th><th>Required</th></tr></thead>
 <tbody>
@@ -305,47 +614,47 @@ curl -X POST https://n8n.stromation.com/webhook/pdfapi \
 </div>
 
 <div class="doc-section">
-<h4 style="font-family:var(--mono);font-size:.82rem;margin-bottom:.5rem;color:var(--text);">Body Parameters</h4>
+<h4 style="font-family:var(--mono);font-size:.78rem;margin-bottom:.5rem;color:var(--text);font-weight:600">Body Parameters</h4>
 <table class="doc-table">
 <thead><tr><th>Param</th><th>Type</th><th>Description</th></tr></thead>
 <tbody>
-<tr><td>html <em>or</em> content</td><td><code>string</code></td><td>Text/HTML content to convert. Use for text-based input. Max 500KB.</td></tr>
-<tr><td>file_base64 <em>or</em> base64</td><td><code>string</code></td><td>Base64-encoded file content. Use for binary files (DOCX, XLSX, PPTX, images, etc.)</td></tr>
-<tr><td>filename</td><td><code>string</code></td><td>Original filename with extension, e.g. <code>"report.docx"</code>. Used for format detection.</td></tr>
-<tr><td>input_format</td><td><code>string</code></td><td>Override auto-detected input format. e.g. <code>"docx"</code>, <code>"xlsx"</code>, <code>"html"</code></td></tr>
-<tr><td>output_format</td><td><code>string</code></td><td>Desired output format. Default: <code>pdf</code>. e.g. <code>"pdf"</code>, <code>"docx"</code>, <code>"csv"</code>, <code>"png"</code></td></tr>
-<tr><td>margin</td><td><code>object</code></td><td><code>{"top": 20, "right": 15, "bottom": 20, "left": 15}</code> in mm. HTML to PDF only.</td></tr>
-<tr><td>landscape</td><td><code>boolean</code></td><td>Landscape orientation. Default: <code>false</code>. HTML to PDF only.</td></tr>
-<tr><td>page_size</td><td><code>string</code></td><td>Page size: <code>Letter</code>, <code>A4</code>, <code>Legal</code>. Default: <code>Letter</code>. HTML to PDF only.</td></tr>
+<tr><td>html</td><td><code>string</code></td><td>Text or HTML content to convert. Max 500KB. Use for text-based input.</td></tr>
+<tr><td>file_base64</td><td><code>string</code></td><td>Base64-encoded file. Use for binary files (DOCX, XLSX, images, etc.)</td></tr>
+<tr><td>filename</td><td><code>string</code></td><td>Original filename for auto-detection. e.g. <code>"report.docx"</code></td></tr>
+<tr><td>input_format</td><td><code>string</code></td><td>Override auto-detection. e.g. <code>"docx"</code>, <code>"xlsx"</code></td></tr>
+<tr><td>output_format</td><td><code>string</code></td><td>Desired output. Default: <code>pdf</code></td></tr>
+<tr><td>margin</td><td><code>object</code></td><td><code>{"top":20,"right":15,"bottom":20,"left":15}</code> mm. HTML→PDF only.</td></tr>
+<tr><td>landscape</td><td><code>boolean</code></td><td>Landscape orientation. Default: <code>false</code>. HTML→PDF only.</td></tr>
+<tr><td>page_size</td><td><code>string</code></td><td><code>Letter</code>, <code>A4</code>, or <code>Legal</code>. Default: <code>Letter</code>. HTML→PDF only.</td></tr>
 </tbody>
 </table>
-<p style="font-size:.78rem;color:var(--text3);margin-top:.75rem;">You must provide either <code style="font-family:var(--code);font-size:.72rem;color:var(--cyan)">html</code>/<code style="font-family:var(--code);font-size:.72rem;color:var(--cyan)">content</code> or <code style="font-family:var(--code);font-size:.72rem;color:var(--cyan)">file_base64</code>/<code style="font-family:var(--code);font-size:.72rem;color:var(--cyan)">base64</code>. If sending a binary file, include <code style="font-family:var(--code);font-size:.72rem;color:var(--cyan)">filename</code> for auto-detection or set <code style="font-family:var(--code);font-size:.72rem;color:var(--cyan)">input_format</code> explicitly.</p>
+<div class="doc-note">Provide either <code>html</code> (text input) or <code>file_base64</code> (binary input). Include <code>filename</code> for auto-detection or set <code>input_format</code> explicitly.</div>
 </div>
 
 <div class="doc-section">
-<h4 style="font-family:var(--mono);font-size:.82rem;margin-bottom:.5rem;color:var(--text);">Response</h4>
+<h4 style="font-family:var(--mono);font-size:.78rem;margin-bottom:.5rem;color:var(--text);font-weight:600">Response</h4>
 <table class="doc-table">
 <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
 <tbody>
 <tr><td>success</td><td><code>boolean</code></td><td>Whether the conversion succeeded</td></tr>
 <tr><td>output_base64</td><td><code>string</code></td><td>Base64-encoded output file</td></tr>
-<tr><td>output_format</td><td><code>string</code></td><td>The output format produced, e.g. <code>"pdf"</code></td></tr>
-<tr><td>input_format</td><td><code>string</code></td><td>The detected or specified input format</td></tr>
-<tr><td>mime_type</td><td><code>string</code></td><td>MIME type of the output file</td></tr>
+<tr><td>output_format</td><td><code>string</code></td><td>Output format produced</td></tr>
+<tr><td>input_format</td><td><code>string</code></td><td>Detected or specified input format</td></tr>
+<tr><td>mime_type</td><td><code>string</code></td><td>MIME type of the output</td></tr>
 <tr><td>size_bytes</td><td><code>integer</code></td><td>Output file size in bytes</td></tr>
 <tr><td>duration_ms</td><td><code>integer</code></td><td>Conversion time in milliseconds</td></tr>
-<tr><td>usage</td><td><code>object</code></td><td><code>{"used": 1, "limit": 50, "plan": "free"}</code></td></tr>
+<tr><td>usage</td><td><code>object</code></td><td><code>{"used":1,"limit":50,"plan":"free"}</code></td></tr>
 </tbody>
 </table>
 </div>
 
 <div class="doc-section">
-<h4 style="font-family:var(--mono);font-size:.82rem;margin-bottom:.5rem;color:var(--text);">Error Codes</h4>
+<h4 style="font-family:var(--mono);font-size:.78rem;margin-bottom:.5rem;color:var(--text);font-weight:600">Error Codes</h4>
 <table class="doc-table">
 <thead><tr><th>Status</th><th>Meaning</th></tr></thead>
 <tbody>
 <tr><td>401</td><td>Missing or invalid API key</td></tr>
-<tr><td>400</td><td>Missing input content, unsupported format, or payload exceeds 500KB</td></tr>
+<tr><td>400</td><td>Missing content, unsupported format, or payload too large</td></tr>
 <tr><td>429</td><td>Usage limit reached for your plan</td></tr>
 <tr><td>500</td><td>Conversion failed (server error)</td></tr>
 </tbody>
@@ -353,34 +662,44 @@ curl -X POST https://n8n.stromation.com/webhook/pdfapi \
 </div>
 
 <div class="doc-section">
-<h3>POST /webhook/pdfapi-signup</h3>
-<p style="font-size:.88rem;color:var(--text2);margin-bottom:1rem;">Create a free API key. No credit card needed.</p>
+<h3><span class="method">POST</span> /webhook/pdfapi-signup</h3>
+<p style="font-size:.88rem;color:var(--text2);margin-bottom:1.25rem;">Create a free API key instantly. No credit card.</p>
 <div class="code-block" style="margin-top:1rem;">
-<div class="code-bar"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-title">signup.sh</span></div>
-<pre>curl -X POST https://n8n.stromation.com/webhook/pdfapi-signup \
-  -H <span class="c-str">"Content-Type: application/json"</span> \
-  -d '{ <span class="c-key">"email"</span>: <span class="c-str">"you@example.com"</span> }'
+<div class="code-bar"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-title">signup</span></div>
+<pre><span class="c-fn">curl</span> <span class="c-flag">-X</span> POST https://n8n.stromation.com/webhook/pdfapi-signup \
+  <span class="c-flag">-H</span> <span class="c-str">"Content-Type: application/json"</span> \
+  <span class="c-flag">-d</span> <span class="c-str">'{ <span class="c-key">"email"</span>: <span class="c-str">"you@example.com"</span> }'</span>
 
-<span class="c-com"># Response:</span>
+<span class="c-com"># Response</span>
 {
-  <span class="c-key">"api_key"</span>: <span class="c-str">"pk_aBcDeFgHiJkLmNoPqRsTuVwXyZ012345"</span>,
-  <span class="c-key">"plan"</span>: <span class="c-str">"free"</span>,
-  <span class="c-key">"usage"</span>: { <span class="c-key">"used"</span>: <span class="c-num">0</span>, <span class="c-key">"limit"</span>: <span class="c-num">50</span> }
+  <span class="c-key">"api_key"</span>: <span class="c-str">"pk_aBcDeFgHiJkLmNoPqRsTuV..."</span>,
+  <span class="c-key">"plan"</span>:    <span class="c-str">"free"</span>,
+  <span class="c-key">"usage"</span>:   { <span class="c-key">"used"</span>: <span class="c-num">0</span>, <span class="c-key">"limit"</span>: <span class="c-num">50</span> }
 }</pre>
 </div>
 </div>
 </div>
 </section>
 
-<footer><div class="w"><p>A product by <a href="https://www.stromation.com">Stromation</a> &middot; <a href="mailto:contact@stromation.com">contact@stromation.com</a> &middot; Dallas, TX</p></div></footer>
+<footer>
+<div class="w">
+<p>A product by <a href="https://www.stromation.com">Stromation</a></p>
+<div class="footer-links">
+<a href="mailto:contact@stromation.com">contact@stromation.com</a>
+<a href="https://www.stromation.com">stromation.com</a>
+</div>
+</div>
+</footer>
 
 <script>
 function showTab(id, el) {
-    document.querySelectorAll('.code-block pre').forEach(function(p) { p.style.display = 'none'; });
-    document.querySelectorAll('.code-tab').forEach(function(t) { t.classList.remove('active'); });
+    var block = el.closest('.code-block');
+    block.querySelectorAll('pre').forEach(function(p) { p.style.display = 'none'; });
+    block.querySelectorAll('.code-tab').forEach(function(t) { t.classList.remove('active'); });
     document.getElementById(id).style.display = 'block';
     el.classList.add('active');
 }
+
 function getKey(e) {
     e.preventDefault();
     var email = document.getElementById('keyEmail').value.trim();
@@ -400,6 +719,7 @@ function getKey(e) {
             document.getElementById('keyVal').textContent = data.api_key;
             result.style.display = 'block';
             btn.textContent = 'Key Created';
+            gtag('event', 'generate_lead', { event_category: 'api_signup', event_label: 'convert_api' });
         } else {
             btn.textContent = data.error || 'Error. Try again.';
             setTimeout(function() { btn.textContent = 'Get Free API Key'; btn.disabled = false; }, 3000);
@@ -410,6 +730,24 @@ function getKey(e) {
         setTimeout(function() { btn.textContent = 'Get Free API Key'; btn.disabled = false; }, 3000);
     });
 }
+
+document.getElementById('swapBtn').addEventListener('click', function() {
+    var from = document.getElementById('fmtFrom');
+    var to = document.getElementById('fmtTo');
+    var tmp = from.value;
+    from.value = to.value;
+    to.value = tmp;
+});
+
+var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
 </script>
 </body>
 </html>
