@@ -155,7 +155,7 @@ footer a{color:var(--cyan);text-decoration:none}
 </div>
 </div>
 <pre id="tab1"><span class="c-com"># Convert a DOCX file to PDF</span>
-curl -X POST https://n8n.myaibuffet.com/webhook/pdfapi \
+curl -X POST https://n8n.stromation.com/webhook/pdfapi \
   -H <span class="c-str">"Content-Type: application/json"</span> \
   -H <span class="c-str">"x-api-key: pk_your_api_key_here"</span> \
   -d '{
@@ -176,7 +176,7 @@ curl -X POST https://n8n.myaibuffet.com/webhook/pdfapi \
   <span class="c-key">"usage"</span>: { <span class="c-key">"used"</span>: <span class="c-num">1</span>, <span class="c-key">"limit"</span>: <span class="c-num">50</span>, <span class="c-key">"plan"</span>: <span class="c-str">"free"</span> }
 }</pre>
 <pre id="tab2" style="display:none"><span class="c-com"># Convert HTML to a Word document</span>
-curl -X POST https://n8n.myaibuffet.com/webhook/pdfapi \
+curl -X POST https://n8n.stromation.com/webhook/pdfapi \
   -H <span class="c-str">"Content-Type: application/json"</span> \
   -H <span class="c-str">"x-api-key: pk_your_api_key_here"</span> \
   -d '{
@@ -357,7 +357,7 @@ curl -X POST https://n8n.myaibuffet.com/webhook/pdfapi \
 <p style="font-size:.88rem;color:var(--text2);margin-bottom:1rem;">Create a free API key. No credit card needed.</p>
 <div class="code-block" style="margin-top:1rem;">
 <div class="code-bar"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-title">signup.sh</span></div>
-<pre>curl -X POST https://n8n.myaibuffet.com/webhook/pdfapi-signup \
+<pre>curl -X POST https://n8n.stromation.com/webhook/pdfapi-signup \
   -H <span class="c-str">"Content-Type: application/json"</span> \
   -d '{ <span class="c-key">"email"</span>: <span class="c-str">"you@example.com"</span> }'
 
@@ -389,7 +389,7 @@ function getKey(e) {
     btn.textContent = 'Creating...';
     btn.disabled = true;
 
-    fetch('https://n8n.myaibuffet.com/webhook/pdfapi-signup', {
+    fetch('https://n8n.stromation.com/webhook/pdfapi-signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email })

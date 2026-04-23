@@ -165,7 +165,7 @@ Loading dashboard...
 <button class="qs-copy" onclick="copyCurl()">copy</button>
 </div>
 <pre class="qs-code" id="curlBlock"><span class="c-com"># Convert a DOCX file to PDF</span>
-curl -X POST https://n8n.myaibuffet.com/webhook/pdfapi \
+curl -X POST https://n8n.stromation.com/webhook/pdfapi \
   -H <span class="c-str">"Content-Type: application/json"</span> \
   -d <span class="c-str">'{
     "api_key": "<span class="c-key" id="curlKey">YOUR_API_KEY</span>",
@@ -194,7 +194,7 @@ curl -X POST https://n8n.myaibuffet.com/webhook/pdfapi \
 <script>
 const SUPABASE_URL = 'https://iadzcnzgbtuigyodeqas.supabase.co';
 const SUPABASE_ANON = 'sb_publishable_8qa-nssfdtEkCz-42wOSWQ_2P7S4Zj7';
-const WEBHOOK_BASE = 'https://n8n.myaibuffet.com/webhook';
+const WEBHOOK_BASE = 'https://n8n.stromation.com/webhook';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
 let currentUser = null;
