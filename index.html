@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-B6Z6XV02RT"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-B6Z6XV02RT');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stromation PDF API — HTML to PDF in one API call</title>
+<meta name="description" content="Convert HTML to PDF with a single API call. 50 free per month. No watermark. Fast. Self-hosted infrastructure.">
+<meta name="theme-color" content="#0B0E14">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0B0E14;--card:#131720;--border:#1E2330;--text:#D4D7DE;--text2:#7A7F8E;--text3:#4A4F5C;--cyan:#00B4D8;--cyan-dim:rgba(0,180,216,.08);--cyan-glow:rgba(0,180,216,.2);--green:#10B981;--red:#EF4444;--amber:#F59E0B;--mono:'Space Mono',monospace;--body:'Outfit',sans-serif;--code:'Fira Code',monospace;--radius:8px}
+body{font-family:var(--body);color:var(--text);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased}
+::selection{background:var(--cyan);color:var(--bg)}
+.w{max-width:900px;margin:0 auto;padding:0 2rem}
+
+/* NAV */
+nav{padding:.75rem 0;border-bottom:1px solid var(--border);background:rgba(11,14,20,.95);backdrop-filter:blur(12px);position:sticky;top:0;z-index:50}
+nav .w{display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--mono);font-weight:700;font-size:.9rem;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:.4rem}
+.logo-dot{width:7px;height:7px;background:var(--cyan);border-radius:2px}
+.nav-r{display:flex;align-items:center;gap:1.5rem}
+.nav-r a{font-size:.82rem;color:var(--text2);text-decoration:none;transition:color .15s}
+.nav-r a:hover{color:var(--cyan)}
+.nav-btn{background:var(--cyan);color:#000;padding:.4rem .9rem;border-radius:6px;font-weight:600;font-size:.8rem;font-family:var(--mono)}
+
+/* HERO */
+.hero{padding:5rem 0 3rem;text-align:center}
+.hero h1{font-family:var(--mono);font-size:3rem;font-weight:700;letter-spacing:-.03em;margin-bottom:.5rem}
+.hero h1 span{color:var(--cyan)}
+.hero p{font-size:1.1rem;color:var(--text2);max-width:460px;margin:0 auto 2rem}
+.key-form{display:flex;gap:.5rem;max-width:400px;margin:0 auto}
+.key-form input{flex:1;padding:.6rem 1rem;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:var(--body);font-size:.88rem}
+.key-form input:focus{outline:none;border-color:var(--cyan)}
+.key-form input::placeholder{color:var(--text3)}
+.key-form button{padding:.6rem 1.25rem;background:var(--cyan);color:#000;border:none;border-radius:var(--radius);font-family:var(--mono);font-weight:700;font-size:.82rem;cursor:pointer;white-space:nowrap;transition:all .15s}
+.key-form button:hover{box-shadow:0 0 20px var(--cyan-glow)}
+.key-result{max-width:400px;margin:1rem auto 0;padding:1rem;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);display:none;text-align:left}
+.key-result .key-val{font-family:var(--code);font-size:.82rem;color:var(--cyan);word-break:break-all;margin:.5rem 0}
+.key-result .copy-btn{font-size:.7rem;color:var(--text2);cursor:pointer;border:1px solid var(--border);background:none;padding:.2rem .6rem;border-radius:4px;font-family:var(--mono)}
+.key-result .copy-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.hero-note{font-size:.78rem;color:var(--text3);margin-top:1rem}
+
+/* CODE BLOCK */
+.code-section{padding:3rem 0}
+.code-block{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.code-bar{display:flex;align-items:center;gap:6px;padding:.5rem .75rem;border-bottom:1px solid var(--border);background:rgba(0,0,0,.2)}
+.code-dot{width:8px;height:8px;border-radius:50%}
+.code-dot.r{background:#FF5F56}.code-dot.y{background:#FFBD2E}.code-dot.g{background:#27C93F}
+.code-title{margin-left:.5rem;font-family:var(--code);font-size:.6rem;color:var(--text3)}
+.code-tabs{display:flex;gap:0;margin-left:auto}
+.code-tab{font-family:var(--code);font-size:.6rem;padding:.2rem .6rem;color:var(--text3);cursor:pointer;border:1px solid transparent;border-radius:4px}
+.code-tab.active{color:var(--cyan);border-color:var(--border);background:rgba(0,180,216,.05)}
+pre{padding:1.25rem;font-family:var(--code);font-size:.8rem;line-height:1.7;overflow-x:auto;color:var(--text)}
+.c-key{color:var(--cyan)}.c-str{color:var(--green)}.c-num{color:var(--amber)}.c-com{color:var(--text3)}
+
+/* FEATURES */
+.features{padding:3rem 0}
+.sec-label{font-family:var(--code);font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--text3);margin-bottom:.75rem}
+.sec-h{font-family:var(--mono);font-size:1.6rem;font-weight:700;margin-bottom:2rem;letter-spacing:-.02em}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.feat{padding:1.25rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--card)}
+.feat h3{font-family:var(--mono);font-size:.85rem;font-weight:700;margin-bottom:.3rem}
+.feat p{font-size:.8rem;color:var(--text2);line-height:1.5}
+
+/* PRICING */
+.pricing{padding:3rem 0}
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.price-card{padding:1.75rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--card)}
+.price-card.pop{border-color:var(--cyan);box-shadow:0 0 30px var(--cyan-dim)}
+.price-tag{font-family:var(--code);font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:.5rem}
+.price-card h3{font-family:var(--mono);font-size:1rem;font-weight:700;margin-bottom:.25rem}
+.price-val{font-family:var(--code);font-size:2rem;font-weight:700;color:var(--cyan);margin-bottom:.25rem}
+.price-val span{font-size:.8rem;font-weight:400;color:var(--text3)}
+.price-card ul{list-style:none;margin-top:1rem}
+.price-card li{font-size:.82rem;color:var(--text2);padding:.3rem 0;padding-left:1rem;position:relative}
+.price-card li::before{content:"";position:absolute;left:0;top:.55rem;width:5px;height:5px;border-radius:50%;background:var(--green)}
+.price-btn{display:block;text-align:center;margin-top:1.25rem;padding:.6rem;border-radius:var(--radius);font-family:var(--mono);font-size:.8rem;font-weight:700;text-decoration:none;transition:all .15s}
+.price-btn-free{background:var(--cyan-dim);color:var(--cyan);border:1px solid var(--border)}
+.price-btn-free:hover{border-color:var(--cyan)}
+.price-btn-pro{background:var(--cyan);color:#000}
+.price-btn-pro:hover{box-shadow:0 0 20px var(--cyan-glow)}
+
+/* DOCS */
+.docs{padding:3rem 0}
+.doc-section{margin-bottom:2rem}
+.doc-section h3{font-family:var(--mono);font-size:1rem;font-weight:700;margin-bottom:.75rem;color:var(--cyan)}
+.doc-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.doc-table th{text-align:left;padding:.6rem .75rem;font-family:var(--code);font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);background:rgba(0,0,0,.2);border-bottom:1px solid var(--border)}
+.doc-table td{padding:.6rem .75rem;border-bottom:1px solid var(--border);color:var(--text2)}
+.doc-table td:first-child{font-family:var(--code);color:var(--text)}
+.doc-table code{font-family:var(--code);font-size:.75rem;background:rgba(0,180,216,.06);padding:.1rem .4rem;border-radius:3px;color:var(--cyan)}
+.required{color:var(--red);font-size:.6rem;font-family:var(--code)}
+
+/* FOOTER */
+footer{padding:2rem 0;border-top:1px solid var(--border);text-align:center}
+footer p{font-size:.75rem;color:var(--text3)}
+footer a{color:var(--cyan);text-decoration:none}
+
+/* RESPONSIVE */
+@media(max-width:768px){.hero h1{font-size:2rem}.feat-grid,.price-grid{grid-template-columns:1fr}.key-form{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<nav><div class="w"><a href="/" class="logo"><span class="logo-dot"></span>Stromation PDF API</a><div class="nav-r"><a href="#docs">Docs</a><a href="#pricing">Pricing</a><a href="#hero" class="nav-btn">Get API Key</a></div></div></nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+<div class="w">
+<h1>HTML to PDF.<br><span>One API call.</span></h1>
+<p>Send HTML, get back a PDF. 50 free per month. No credit card. No watermark.</p>
+<form class="key-form" id="keyForm" onsubmit="getKey(event)">
+<input type="email" id="keyEmail" placeholder="you@example.com" required>
+<button type="submit" id="keyBtn">Get Free API Key</button>
+</form>
+<div class="key-result" id="keyResult">
+<div style="font-size:.8rem;color:var(--green);margin-bottom:.25rem;">API key created</div>
+<div class="key-val" id="keyVal"></div>
+<button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('keyVal').textContent);this.textContent='copied'">copy</button>
+<div style="font-size:.7rem;color:var(--text3);margin-top:.5rem;">Also emailed to you. Keep it secret.</div>
+</div>
+<p class="hero-note">Free tier: 50 PDFs/month. Upgrade anytime. No commitment.</p>
+</div>
+</section>
+
+<!-- CODE EXAMPLE -->
+<section class="code-section">
+<div class="w">
+<div class="code-block">
+<div class="code-bar">
+<span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span>
+<span class="code-title">request.sh</span>
+</div>
+<pre><span class="c-com"># Generate a PDF from HTML</span>
+curl -X POST https://n8n.myaibuffet.com/webhook/pdfapi \
+  -H <span class="c-str">"Content-Type: application/json"</span> \
+  -H <span class="c-str">"x-api-key: pk_your_api_key_here"</span> \
+  -d '{
+    <span class="c-key">"html"</span>: <span class="c-str">"&lt;h1&gt;Hello World&lt;/h1&gt;&lt;p&gt;This is a PDF.&lt;/p&gt;"</span>,
+    <span class="c-key">"format"</span>: <span class="c-str">"Letter"</span>,
+    <span class="c-key">"margin"</span>: { <span class="c-key">"top"</span>: <span class="c-num">20</span>, <span class="c-key">"right"</span>: <span class="c-num">15</span>, <span class="c-key">"bottom"</span>: <span class="c-num">20</span>, <span class="c-key">"left"</span>: <span class="c-num">15</span> }
+  }'
+
+<span class="c-com"># Response:</span>
+{
+  <span class="c-key">"success"</span>: <span class="c-num">true</span>,
+  <span class="c-key">"pdf_base64"</span>: <span class="c-str">"JVBERi0xLjQK..."</span>,
+  <span class="c-key">"size_bytes"</span>: <span class="c-num">14832</span>,
+  <span class="c-key">"duration_ms"</span>: <span class="c-num">1247</span>,
+  <span class="c-key">"usage"</span>: { <span class="c-key">"used"</span>: <span class="c-num">1</span>, <span class="c-key">"limit"</span>: <span class="c-num">50</span>, <span class="c-key">"plan"</span>: <span class="c-str">"free"</span> }
+}</pre>
+</div>
+</div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+<div class="w">
+<div class="sec-label">// features</div>
+<h2 class="sec-h">What you get</h2>
+<div class="feat-grid">
+<div class="feat"><h3>Fast</h3><p>Most PDFs generate in under 2 seconds. No queue, no waiting.</p></div>
+<div class="feat"><h3>Multiple sizes</h3><p>Letter, A4, Legal, or any custom page size. Portrait or landscape.</p></div>
+<div class="feat"><h3>Custom margins</h3><p>Set top, right, bottom, left margins in millimeters per request.</p></div>
+<div class="feat"><h3>No watermark</h3><p>Even on the free tier. Your PDFs, your brand. Nothing added.</p></div>
+<div class="feat"><h3>Base64 response</h3><p>PDF returned as base64 in JSON. Decode and save. Simple.</p></div>
+<div class="feat"><h3>Usage tracking</h3><p>Every response includes your current usage count and limit.</p></div>
+</div>
+</div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+<div class="w">
+<div class="sec-label">// pricing</div>
+<h2 class="sec-h">Simple. Per month.</h2>
+<div class="price-grid">
+<div class="price-card">
+<div class="price-tag">Free</div>
+<h3>Starter</h3>
+<div class="price-val">$0<span>/mo</span></div>
+<ul><li>50 PDFs per month</li><li>All page sizes</li><li>No watermark</li><li>Email support</li></ul>
+<a href="#hero" class="price-btn price-btn-free">Get API Key</a>
+</div>
+<div class="price-card pop">
+<div class="price-tag" style="color:var(--cyan)">Popular</div>
+<h3>Pro</h3>
+<div class="price-val">$9<span>/mo</span></div>
+<ul><li>1,000 PDFs per month</li><li>Priority processing</li><li>All features</li><li>Email support</li></ul>
+<a href="mailto:contact@stromation.com?subject=PDF API Pro" class="price-btn price-btn-pro">Upgrade</a>
+</div>
+<div class="price-card">
+<div class="price-tag">Volume</div>
+<h3>Business</h3>
+<div class="price-val">$29<span>/mo</span></div>
+<ul><li>5,000 PDFs per month</li><li>Priority processing</li><li>All features</li><li>Dedicated support</li></ul>
+<a href="mailto:contact@stromation.com?subject=PDF API Business" class="price-btn price-btn-free">Contact Us</a>
+</div>
+</div>
+</div>
+</section>
+
+<!-- API DOCS -->
+<section class="docs" id="docs">
+<div class="w">
+<div class="sec-label">// api reference</div>
+<h2 class="sec-h">Documentation</h2>
+
+<div class="doc-section">
+<h3>POST /webhook/pdfapi</h3>
+<p style="font-size:.88rem;color:var(--text2);margin-bottom:1rem;">Generate a PDF from HTML content.</p>
+
+<h4 style="font-family:var(--mono);font-size:.82rem;margin-bottom:.5rem;color:var(--text);">Headers</h4>
+<table class="doc-table">
+<thead><tr><th>Header</th><th>Value</th><th>Required</th></tr></thead>
+<tbody>
+<tr><td>Content-Type</td><td><code>application/json</code></td><td><span class="required">REQUIRED</span></td></tr>
+<tr><td>x-api-key</td><td><code>pk_your_key</code></td><td><span class="required">REQUIRED</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="doc-section">
+<h4 style="font-family:var(--mono);font-size:.82rem;margin-bottom:.5rem;color:var(--text);">Body Parameters</h4>
+<table class="doc-table">
+<thead><tr><th>Param</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td>html</td><td><code>string</code></td><td>HTML content to convert. Max 500KB. <span class="required">REQUIRED</span></td></tr>
+<tr><td>format</td><td><code>string</code></td><td>Page size: <code>Letter</code>, <code>A4</code>, <code>Legal</code>. Default: <code>Letter</code></td></tr>
+<tr><td>margin</td><td><code>object</code></td><td><code>{"top": 20, "right": 15, "bottom": 20, "left": 15}</code> in mm</td></tr>
+<tr><td>landscape</td><td><code>boolean</code></td><td>Landscape orientation. Default: <code>false</code></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="doc-section">
+<h4 style="font-family:var(--mono);font-size:.82rem;margin-bottom:.5rem;color:var(--text);">Response</h4>
+<table class="doc-table">
+<thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td>success</td><td><code>boolean</code></td><td>Whether the PDF was generated</td></tr>
+<tr><td>pdf_base64</td><td><code>string</code></td><td>Base64-encoded PDF content</td></tr>
+<tr><td>size_bytes</td><td><code>integer</code></td><td>PDF file size in bytes</td></tr>
+<tr><td>duration_ms</td><td><code>integer</code></td><td>Generation time in milliseconds</td></tr>
+<tr><td>usage</td><td><code>object</code></td><td><code>{"used": 1, "limit": 50, "plan": "free"}</code></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="doc-section">
+<h4 style="font-family:var(--mono);font-size:.82rem;margin-bottom:.5rem;color:var(--text);">Error Codes</h4>
+<table class="doc-table">
+<thead><tr><th>Status</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td>401</td><td>Missing or invalid API key</td></tr>
+<tr><td>400</td><td>Missing <code>html</code> field or HTML exceeds 500KB</td></tr>
+<tr><td>429</td><td>Usage limit reached for your plan</td></tr>
+<tr><td>500</td><td>PDF generation failed (server error)</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="doc-section">
+<h3>POST /webhook/pdfapi-signup</h3>
+<p style="font-size:.88rem;color:var(--text2);margin-bottom:1rem;">Create a free API key. No credit card needed.</p>
+<div class="code-block" style="margin-top:1rem;">
+<div class="code-bar"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-title">signup.sh</span></div>
+<pre>curl -X POST https://n8n.myaibuffet.com/webhook/pdfapi-signup \
+  -H <span class="c-str">"Content-Type: application/json"</span> \
+  -d '{ <span class="c-key">"email"</span>: <span class="c-str">"you@example.com"</span> }'
+
+<span class="c-com"># Response:</span>
+{
+  <span class="c-key">"api_key"</span>: <span class="c-str">"pk_aBcDeFgHiJkLmNoPqRsTuVwXyZ012345"</span>,
+  <span class="c-key">"plan"</span>: <span class="c-str">"free"</span>,
+  <span class="c-key">"usage"</span>: { <span class="c-key">"used"</span>: <span class="c-num">0</span>, <span class="c-key">"limit"</span>: <span class="c-num">50</span> }
+}</pre>
+</div>
+</div>
+</div>
+</section>
+
+<footer><div class="w"><p>A product by <a href="https://www.stromation.com">Stromation</a> &middot; <a href="mailto:contact@stromation.com">contact@stromation.com</a> &middot; Dallas, TX</p></div></footer>
+
+<script>
+function getKey(e) {
+    e.preventDefault();
+    var email = document.getElementById('keyEmail').value.trim();
+    var btn = document.getElementById('keyBtn');
+    var result = document.getElementById('keyResult');
+    btn.textContent = 'Creating...';
+    btn.disabled = true;
+
+    fetch('https://n8n.myaibuffet.com/webhook/pdfapi-signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        if (data.api_key) {
+            document.getElementById('keyVal').textContent = data.api_key;
+            result.style.display = 'block';
+            btn.textContent = 'Key Created';
+        } else {
+            btn.textContent = data.error || 'Error. Try again.';
+            setTimeout(function() { btn.textContent = 'Get Free API Key'; btn.disabled = false; }, 3000);
+        }
+    })
+    .catch(function() {
+        btn.textContent = 'Error. Try again.';
+        setTimeout(function() { btn.textContent = 'Get Free API Key'; btn.disabled = false; }, 3000);
+    });
+}
+</script>
+</body>
+</html>
