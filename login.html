@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-B6Z6XV02RT"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-B6Z6XV02RT');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign In — Stromation Convert API</title>
+<meta name="theme-color" content="#0B0E14">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0B0E14;--card:#131720;--border:#1E2330;--text:#D4D7DE;--text2:#7A7F8E;--text3:#4A4F5C;--cyan:#00B4D8;--cyan-dim:rgba(0,180,216,.08);--cyan-glow:rgba(0,180,216,.2);--green:#10B981;--red:#EF4444;--amber:#F59E0B;--mono:'Space Mono',monospace;--body:'Outfit',sans-serif;--code:'Fira Code',monospace;--radius:8px}
+body{font-family:var(--body);color:var(--text);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+::selection{background:var(--cyan);color:var(--bg)}
+
+nav{padding:.75rem 0;border-bottom:1px solid var(--border);background:rgba(11,14,20,.95);backdrop-filter:blur(12px)}
+nav .w{max-width:900px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--mono);font-weight:700;font-size:.9rem;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:.4rem}
+.logo-dot{width:7px;height:7px;background:var(--cyan);border-radius:2px}
+.nav-r a{font-size:.82rem;color:var(--text2);text-decoration:none;transition:color .15s}
+.nav-r a:hover{color:var(--cyan)}
+
+.login-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem}
+.login-card{width:100%;max-width:400px;padding:2.5rem;background:var(--card);border:1px solid var(--border);border-radius:var(--radius)}
+.login-card h1{font-family:var(--mono);font-size:1.4rem;font-weight:700;margin-bottom:.25rem;letter-spacing:-.02em}
+.login-card h1 span{color:var(--cyan)}
+.login-card .sub{font-size:.88rem;color:var(--text2);margin-bottom:1.75rem}
+
+label{display:block;font-family:var(--code);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:.4rem}
+.input-wrap input{width:100%;padding:.7rem 1rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:var(--body);font-size:.9rem;transition:border-color .15s}
+.input-wrap input:focus{outline:none;border-color:var(--cyan)}
+.input-wrap input::placeholder{color:var(--text3)}
+
+.login-btn{width:100%;margin-top:1.25rem;padding:.75rem;background:var(--cyan);color:#000;border:none;border-radius:var(--radius);font-family:var(--mono);font-weight:700;font-size:.85rem;cursor:pointer;transition:all .15s}
+.login-btn:hover{box-shadow:0 0 24px var(--cyan-glow)}
+.login-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.msg{margin-top:1rem;padding:.75rem 1rem;border-radius:var(--radius);font-size:.82rem;display:none}
+.msg.success{display:block;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);color:var(--green)}
+.msg.error{display:block;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:var(--red)}
+
+.note{font-size:.78rem;color:var(--text3);margin-top:1.25rem;line-height:1.5;text-align:center}
+
+footer{padding:1.5rem 0;border-top:1px solid var(--border);text-align:center}
+footer p{font-size:.75rem;color:var(--text3)}
+footer a{color:var(--cyan);text-decoration:none}
+
+@media(max-width:480px){.login-card{padding:1.75rem}}
+</style>
+</head>
+<body>
+
+<nav><div class="w"><a href="index.html" class="logo"><span class="logo-dot"></span>Stromation Convert API</a><div class="nav-r"><a href="index.html">Home</a></div></div></nav>
+
+<div class="login-wrap">
+<div class="login-card">
+<h1>Sign <span>in</span></h1>
+<p class="sub">Access your API dashboard</p>
+<form id="loginForm" onsubmit="handleLogin(event)">
+<label for="email">Email address</label>
+<div class="input-wrap">
+<input type="email" id="email" placeholder="you@example.com" required autocomplete="email">
+</div>
+<button type="submit" class="login-btn" id="loginBtn">Sign in with magic link</button>
+</form>
+<div class="msg" id="msg"></div>
+<p class="note">Dont have an account? Same button — magic links handle both signup and login.</p>
+</div>
+</div>
+
+<footer><p><a href="index.html">Stromation Convert API</a></p></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://iadzcnzgbtuigyodeqas.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_8qa-nssfdtEkCz-42wOSWQ_2P7S4Zj7';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+(async function init() {
+  // Handle magic link redirect (hash contains access_token)
+  const hash = window.location.hash;
+  if (hash && hash.includes('access_token')) {
+    // Supabase JS v2 auto-detects the hash fragment on init
+    const { data, error } = await sb.auth.getSession();
+    if (data.session) {
+      window.location.href = 'dashboard.html';
+      return;
+    }
+  }
+
+  // Check if already logged in
+  const { data } = await sb.auth.getSession();
+  if (data.session) {
+    window.location.href = 'dashboard.html';
+    return;
+  }
+
+  // Listen for auth state changes (handles magic link token exchange)
+  sb.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' && session) {
+      window.location.href = 'dashboard.html';
+    }
+  });
+})();
+
+async function handleLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('email').value.trim();
+  const btn = document.getElementById('loginBtn');
+  const msg = document.getElementById('msg');
+
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+  msg.className = 'msg';
+  msg.style.display = 'none';
+
+  const { error } = await sb.auth.signInWithOtp({
+    email,
+    options: {
+      emailRedirectTo: window.location.origin + '/login.html'
+    }
+  });
+
+  if (error) {
+    msg.className = 'msg error';
+    msg.textContent = error.message;
+    msg.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Sign in with magic link';
+    return;
+  }
+
+  msg.className = 'msg success';
+  msg.textContent = 'Check your email for the login link. It may take a minute.';
+  msg.style.display = 'block';
+  btn.textContent = 'Email sent';
+}
+</script>
+</body>
+</html>

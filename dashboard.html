@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-B6Z6XV02RT"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-B6Z6XV02RT');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Stromation Convert API</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0B0E14">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0B0E14;--card:#131720;--border:#1E2330;--text:#D4D7DE;--text2:#7A7F8E;--text3:#4A4F5C;--cyan:#00B4D8;--cyan-dim:rgba(0,180,216,.08);--cyan-glow:rgba(0,180,216,.2);--green:#10B981;--red:#EF4444;--amber:#F59E0B;--mono:'Space Mono',monospace;--body:'Outfit',sans-serif;--code:'Fira Code',monospace;--radius:8px}
+body{font-family:var(--body);color:var(--text);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased}
+::selection{background:var(--cyan);color:var(--bg)}
+.w{max-width:900px;margin:0 auto;padding:0 2rem}
+
+nav{padding:.75rem 0;border-bottom:1px solid var(--border);background:rgba(11,14,20,.95);backdrop-filter:blur(12px);position:sticky;top:0;z-index:50}
+nav .w{display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--mono);font-weight:700;font-size:.9rem;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:.4rem}
+.logo-dot{width:7px;height:7px;background:var(--cyan);border-radius:2px}
+.nav-r{display:flex;align-items:center;gap:1.25rem}
+.nav-email{font-size:.78rem;color:var(--text2);font-family:var(--code)}
+.logout-btn{font-size:.78rem;color:var(--text3);background:none;border:1px solid var(--border);padding:.3rem .7rem;border-radius:6px;cursor:pointer;font-family:var(--mono);transition:all .15s}
+.logout-btn:hover{border-color:var(--red);color:var(--red)}
+
+.dash{padding:2.5rem 0 4rem}
+.dash-header{margin-bottom:2rem}
+.dash-header h1{font-family:var(--mono);font-size:1.8rem;font-weight:700;letter-spacing:-.02em}
+.dash-header h1 span{color:var(--cyan)}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.card{padding:1.5rem;background:var(--card);border:1px solid var(--border);border-radius:var(--radius)}
+.card-full{grid-column:1/-1}
+.card-label{font-family:var(--code);font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:.75rem}
+.card h3{font-family:var(--mono);font-size:1rem;font-weight:700;margin-bottom:.5rem}
+
+/* API Key */
+.key-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem}
+.key-display{flex:1;font-family:var(--code);font-size:.82rem;color:var(--cyan);background:var(--bg);padding:.55rem .75rem;border-radius:6px;border:1px solid var(--border);word-break:break-all;min-height:2.2rem;display:flex;align-items:center}
+.key-action{font-size:.7rem;color:var(--text2);cursor:pointer;border:1px solid var(--border);background:none;padding:.35rem .6rem;border-radius:4px;font-family:var(--mono);transition:all .15s;white-space:nowrap}
+.key-action:hover{border-color:var(--cyan);color:var(--cyan)}
+.key-action.danger:hover{border-color:var(--red);color:var(--red)}
+.key-hint{font-size:.72rem;color:var(--text3)}
+
+/* Usage */
+.usage-bar-wrap{background:var(--bg);border-radius:6px;height:10px;overflow:hidden;margin:.75rem 0 .5rem;border:1px solid var(--border)}
+.usage-bar{height:100%;background:var(--cyan);border-radius:6px;transition:width .4s ease}
+.usage-bar.warn{background:var(--amber)}
+.usage-bar.crit{background:var(--red)}
+.usage-stats{display:flex;justify-content:space-between;font-size:.78rem;color:var(--text2)}
+.usage-stats span{font-family:var(--code)}
+.plan-badge{display:inline-block;font-family:var(--code);font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;padding:.2rem .55rem;border-radius:4px;margin-bottom:.5rem}
+.plan-free{background:var(--cyan-dim);color:var(--cyan);border:1px solid rgba(0,180,216,.15)}
+.plan-pro{background:rgba(16,185,129,.08);color:var(--green);border:1px solid rgba(16,185,129,.15)}
+.plan-business{background:rgba(245,158,11,.08);color:var(--amber);border:1px solid rgba(245,158,11,.15)}
+
+/* Quick Start */
+.qs-block{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.qs-bar{display:flex;align-items:center;gap:6px;padding:.5rem .75rem;border-bottom:1px solid var(--border);background:rgba(0,0,0,.2)}
+.qs-dot{width:8px;height:8px;border-radius:50%}
+.qs-dot.r{background:#FF5F56}.qs-dot.y{background:#FFBD2E}.qs-dot.g{background:#27C93F}
+.qs-title{margin-left:.5rem;font-family:var(--code);font-size:.6rem;color:var(--text3)}
+.qs-copy{margin-left:auto;font-size:.65rem;color:var(--text3);cursor:pointer;border:1px solid var(--border);background:none;padding:.15rem .5rem;border-radius:4px;font-family:var(--mono);transition:all .15s}
+.qs-copy:hover{border-color:var(--cyan);color:var(--cyan)}
+pre.qs-code{padding:1rem;font-family:var(--code);font-size:.78rem;line-height:1.7;overflow-x:auto;color:var(--text)}
+.c-key{color:var(--cyan)}.c-str{color:var(--green)}.c-com{color:var(--text3)}
+
+/* Plan */
+.plan-current{font-size:.95rem;margin-bottom:.75rem}
+.plan-current strong{font-family:var(--mono)}
+.upgrade-btns{display:flex;gap:.5rem;flex-wrap:wrap}
+.upgrade-btn{padding:.55rem 1rem;border-radius:var(--radius);font-family:var(--mono);font-size:.78rem;font-weight:700;cursor:pointer;transition:all .15s;text-decoration:none;border:none}
+.upgrade-btn.pro{background:var(--cyan);color:#000}
+.upgrade-btn.pro:hover{box-shadow:0 0 20px var(--cyan-glow)}
+.upgrade-btn.biz{background:var(--cyan-dim);color:var(--cyan);border:1px solid var(--border)}
+.upgrade-btn.biz:hover{border-color:var(--cyan)}
+.upgrade-btn.manage{background:none;color:var(--text2);border:1px solid var(--border)}
+.upgrade-btn.manage:hover{border-color:var(--cyan);color:var(--cyan)}
+
+/* Loading */
+.loading{text-align:center;padding:4rem 0;color:var(--text3);font-family:var(--code);font-size:.85rem}
+.loading .spinner{width:28px;height:28px;border:2px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Toast */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;padding:.6rem 1rem;background:var(--card);border:1px solid var(--green);border-radius:var(--radius);font-size:.78rem;color:var(--green);font-family:var(--code);transform:translateY(100px);opacity:0;transition:all .3s ease;z-index:100}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.err{border-color:var(--red);color:var(--red)}
+
+footer{padding:1.5rem 0;border-top:1px solid var(--border);text-align:center}
+footer p{font-size:.75rem;color:var(--text3)}
+footer a{color:var(--cyan);text-decoration:none}
+
+@media(max-width:768px){
+.grid{grid-template-columns:1fr}
+.key-row{flex-wrap:wrap}
+.key-display{min-width:0}
+.nav-email{display:none}
+.upgrade-btns{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<nav>
+<div class="w">
+<a href="index.html" class="logo"><span class="logo-dot"></span>Stromation Convert API</a>
+<div class="nav-r">
+<span class="nav-email" id="navEmail"></span>
+<button class="logout-btn" onclick="logout()">Sign out</button>
+</div>
+</div>
+</nav>
+
+<div class="loading" id="loadingState">
+<div class="spinner"></div>
+Loading dashboard...
+</div>
+
+<div class="dash" id="dashContent" style="display:none">
+<div class="w">
+
+<div class="dash-header">
+<h1>Your <span>API</span></h1>
+</div>
+
+<div class="grid">
+
+<!-- API Key Card -->
+<div class="card">
+<div class="card-label">API Key</div>
+<div class="key-row">
+<div class="key-display" id="keyDisplay"></div>
+<button class="key-action" id="revealBtn" onclick="toggleReveal()">reveal</button>
+<button class="key-action" onclick="copyKey()">copy</button>
+</div>
+<div style="display:flex;align-items:center;justify-content:space-between">
+<span class="key-hint">Keep this secret. Do not expose in frontend code.</span>
+<button class="key-action danger" onclick="regenKey()">regenerate</button>
+</div>
+</div>
+
+<!-- Usage Card -->
+<div class="card">
+<div class="card-label">Usage this period</div>
+<div id="planBadge"></div>
+<div class="usage-bar-wrap"><div class="usage-bar" id="usageBar" style="width:0%"></div></div>
+<div class="usage-stats">
+<span><span id="usageCount">0</span> / <span id="usageLimit">50</span> conversions</span>
+<span>Resets <span id="resetDate">--</span></span>
+</div>
+</div>
+
+<!-- Quick Start Card -->
+<div class="card card-full">
+<div class="card-label">Quick Start</div>
+<div class="qs-block">
+<div class="qs-bar">
+<span class="qs-dot r"></span><span class="qs-dot y"></span><span class="qs-dot g"></span>
+<span class="qs-title">convert.sh</span>
+<button class="qs-copy" onclick="copyCurl()">copy</button>
+</div>
+<pre class="qs-code" id="curlBlock"><span class="c-com"># Convert a DOCX file to PDF</span>
+curl -X POST https://n8n.myaibuffet.com/webhook/pdfapi \
+  -H <span class="c-str">"Content-Type: application/json"</span> \
+  -d <span class="c-str">'{
+    "api_key": "<span class="c-key" id="curlKey">YOUR_API_KEY</span>",
+    "source_url": "https://example.com/file.docx",
+    "format": "pdf"
+  }'</span></pre>
+</div>
+</div>
+
+<!-- Plan Card -->
+<div class="card card-full">
+<div class="card-label">Plan</div>
+<div class="plan-current" id="planInfo"></div>
+<div class="upgrade-btns" id="planActions"></div>
+</div>
+
+</div><!-- /grid -->
+</div><!-- /w -->
+</div><!-- /dash -->
+
+<div class="toast" id="toast"></div>
+
+<footer><p><a href="index.html">Stromation Convert API</a></p></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://iadzcnzgbtuigyodeqas.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_8qa-nssfdtEkCz-42wOSWQ_2P7S4Zj7';
+const WEBHOOK_BASE = 'https://n8n.myaibuffet.com/webhook';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+let currentUser = null;
+let apiKeyData = null;
+let keyRevealed = false;
+
+// ── Auth guard ──
+(async function init() {
+  const { data } = await sb.auth.getSession();
+  if (!data.session) {
+    window.location.href = 'login.html';
+    return;
+  }
+  currentUser = data.session.user;
+  document.getElementById('navEmail').textContent = currentUser.email;
+  await loadDashboard();
+})();
+
+async function loadDashboard() {
+  try {
+    // Fetch API key from pdfapi_keys
+    const { data: keys, error } = await sb.from('pdfapi_keys')
+      .select('*')
+      .eq('user_id', currentUser.id)
+      .limit(1);
+
+    if (error) throw error;
+
+    if (!keys || keys.length === 0) {
+      // No key exists — provision via signup webhook
+      const resp = await fetch(WEBHOOK_BASE + '/pdfapi-signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: currentUser.email, user_id: currentUser.id })
+      });
+      if (!resp.ok) throw new Error('Failed to provision API key');
+      // Re-fetch after creation
+      const { data: newKeys, error: err2 } = await sb.from('pdfapi_keys')
+        .select('*')
+        .eq('user_id', currentUser.id)
+        .limit(1);
+      if (err2) throw err2;
+      if (!newKeys || newKeys.length === 0) throw new Error('Key provisioning did not complete');
+      apiKeyData = newKeys[0];
+    } else {
+      apiKeyData = keys[0];
+    }
+
+    renderDashboard();
+  } catch (err) {
+    console.error(err);
+    document.getElementById('loadingState').innerHTML = '<p style="color:var(--red)">Error loading dashboard. Try refreshing.</p>';
+  }
+}
+
+function renderDashboard() {
+  const d = apiKeyData;
+
+  // Key display
+  renderKey();
+
+  // Usage
+  const used = d.period_usage || 0;
+  const limit = d.monthly_limit || 50;
+  const pct = Math.min((used / limit) * 100, 100);
+  document.getElementById('usageCount').textContent = used;
+  document.getElementById('usageLimit').textContent = limit;
+  const bar = document.getElementById('usageBar');
+  bar.style.width = pct + '%';
+  bar.className = 'usage-bar' + (pct >= 90 ? ' crit' : pct >= 70 ? ' warn' : '');
+
+  // Reset date
+  if (d.period_reset) {
+    const reset = new Date(d.period_reset);
+    document.getElementById('resetDate').textContent = reset.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  }
+
+  // Plan badge
+  const plan = (d.plan || 'free').toLowerCase();
+  const badgeEl = document.getElementById('planBadge');
+  const badgeClass = plan === 'business' ? 'plan-business' : plan === 'pro' ? 'plan-pro' : 'plan-free';
+  badgeEl.innerHTML = '<span class="plan-badge ' + badgeClass + '">' + plan + '</span>';
+
+  // Plan info + actions
+  const planInfo = document.getElementById('planInfo');
+  const planActions = document.getElementById('planActions');
+  const planLabel = plan.charAt(0).toUpperCase() + plan.slice(1);
+
+  if (plan === 'free') {
+    planInfo.innerHTML = 'Current plan: <strong>' + planLabel + '</strong> (50 conversions/month)';
+    planActions.innerHTML =
+      '<button class="upgrade-btn pro" onclick="checkout(\'pro\')">Upgrade to Pro — $9/mo</button>' +
+      '<button class="upgrade-btn biz" onclick="checkout(\'business\')">Upgrade to Business — $29/mo</button>';
+  } else if (plan === 'pro') {
+    planInfo.innerHTML = 'Current plan: <strong>' + planLabel + '</strong> (1,000 conversions/month)';
+    planActions.innerHTML =
+      '<button class="upgrade-btn biz" onclick="checkout(\'business\')">Upgrade to Business — $29/mo</button>' +
+      '<a class="upgrade-btn manage" href="' + (d.stripe_portal_url || '#') + '" target="_blank">Manage Billing</a>';
+  } else {
+    planInfo.innerHTML = 'Current plan: <strong>' + planLabel + '</strong> (10,000 conversions/month)';
+    planActions.innerHTML =
+      '<a class="upgrade-btn manage" href="' + (d.stripe_portal_url || '#') + '" target="_blank">Manage Billing</a>';
+  }
+
+  // Curl key
+  document.getElementById('curlKey').textContent = d.api_key || 'YOUR_API_KEY';
+
+  // Show dashboard
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('dashContent').style.display = 'block';
+}
+
+function renderKey() {
+  const el = document.getElementById('keyDisplay');
+  const key = apiKeyData.api_key || '';
+  if (keyRevealed) {
+    el.textContent = key;
+    document.getElementById('revealBtn').textContent = 'hide';
+  } else {
+    el.textContent = key.substring(0, 8) + '...' + key.substring(key.length - 4);
+    document.getElementById('revealBtn').textContent = 'reveal';
+  }
+}
+
+function toggleReveal() {
+  keyRevealed = !keyRevealed;
+  renderKey();
+}
+
+function copyKey() {
+  navigator.clipboard.writeText(apiKeyData.api_key || '');
+  toast('API key copied to clipboard');
+}
+
+function copyCurl() {
+  const block = document.getElementById('curlBlock');
+  const text = block.textContent;
+  navigator.clipboard.writeText(text);
+  toast('Curl command copied');
+}
+
+async function regenKey() {
+  if (!confirm('Regenerate your API key? Your old key will stop working immediately.')) return;
+  try {
+    const resp = await fetch(WEBHOOK_BASE + '/convert-regen-key', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: currentUser.id })
+    });
+    if (!resp.ok) throw new Error('Regeneration failed');
+    const result = await resp.json();
+    // Re-fetch key
+    const { data: keys } = await sb.from('pdfapi_keys')
+      .select('*')
+      .eq('user_id', currentUser.id)
+      .limit(1);
+    if (keys && keys.length > 0) {
+      apiKeyData = keys[0];
+      keyRevealed = true;
+      renderDashboard();
+      toast('New API key generated');
+    }
+  } catch (err) {
+    toast('Failed to regenerate key', true);
+  }
+}
+
+async function checkout(plan) {
+  try {
+    const resp = await fetch(WEBHOOK_BASE + '/convert-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user_id: currentUser.id,
+        plan: plan,
+        email: currentUser.email
+      })
+    });
+    if (!resp.ok) throw new Error('Checkout failed');
+    const result = await resp.json();
+    if (result.url) {
+      window.location.href = result.url;
+    } else {
+      throw new Error('No checkout URL returned');
+    }
+  } catch (err) {
+    toast('Failed to start checkout', true);
+  }
+}
+
+async function logout() {
+  await sb.auth.signOut();
+  window.location.href = 'login.html';
+}
+
+function toast(msg, isErr) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show' + (isErr ? ' err' : '');
+  setTimeout(() => { el.className = 'toast'; }, 3000);
+}
+</script>
+</body>
+</html>
