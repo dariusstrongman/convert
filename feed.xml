@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Stromation Convert Blog</title>
+    <link>https://convert.stromation.com/blog.html</link>
+    <description>Guides, tutorials, and API updates from Stromation Convert.</description>
+    <language>en-us</language>
+    <atom:link href="https://convert.stromation.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <copyright>2026 Stromation</copyright>
+    <managingEditor>darius@stromation.com (Darius Stroman)</managingEditor>
+    <webMaster>darius@stromation.com (Darius Stroman)</webMaster>
+    <lastBuildDate>Thu, 23 Apr 2026 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://convert.stromation.com/favicon.svg</url>
+      <title>Stromation Convert Blog</title>
+      <link>https://convert.stromation.com/blog.html</link>
+    </image>
+    <!-- Posts injected here by WF25 auto-publisher -->
+  </channel>
+</rss>
