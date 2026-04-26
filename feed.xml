@@ -16,5 +16,12 @@
       <link>https://convert.stromation.com/blog.html</link>
     </image>
     <!-- Posts injected here by WF25 auto-publisher -->
-  </channel>
+    <item>
+    <title>API Rate Limiting: Best Practices for Conversion Services</title>
+    <link>https://convert.stromation.com/blog/api-rate-limiting-best-practices-for-conversion-services.html</link>
+    <description># API Rate Limiting: Best Practices for Conversion Services</description>
+    <pubDate>Sun, 26 Apr 2026 16:00:19 GMT</pubDate>
+    <guid>https://convert.stromation.com/blog/api-rate-limiting-best-practices-for-conversion-services.html</guid>
+  </item>
+</channel>
 </rss>
